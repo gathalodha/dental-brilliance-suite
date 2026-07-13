@@ -48,8 +48,20 @@ function ContactPage() {
       return;
     }
     setErrors({});
-    // TODO: persist to Supabase in phase 2
-    await new Promise((r) => setTimeout(r, 600));
+    const payload = result.data;
+    const { error } = await supabase.from("appointments").insert({
+      name: payload.name,
+      email: payload.email,
+      phone: payload.phone,
+      treatment: payload.treatment || null,
+      preferred_date: payload.date || null,
+      message: payload.message || null,
+    });
+    if (error) {
+      toast.error("We couldn't send your request. Please try again or call us.");
+      setSubmitting(false);
+      return;
+    }
     setSubmitted(true);
     setSubmitting(false);
   }
