@@ -38,7 +38,7 @@ export function SiteHeader() {
           <span className="font-display text-xl tracking-tight">Maison Dentaire</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {nav.map((n) => (
             <Link
               key={n.to}
@@ -52,7 +52,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <a href="tel:+15551234567" className="inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-accent">
             <Phone className="size-4" />
             (555) 123-4567
