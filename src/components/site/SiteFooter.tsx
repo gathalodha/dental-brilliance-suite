@@ -24,6 +24,7 @@ export function SiteFooter() {
               <li><Link to="/treatments" className="hover:text-[var(--bronze-soft)]">Treatments</Link></li>
               <li><Link to="/doctors" className="hover:text-[var(--bronze-soft)]">Our Doctors</Link></li>
               <li><Link to="/gallery" className="hover:text-[var(--bronze-soft)]">Gallery</Link></li>
+              <li><Link to="/testimonials" className="hover:text-[var(--bronze-soft)]">Testimonials</Link></li>
               <li><Link to="/blog" className="hover:text-[var(--bronze-soft)]">Journal</Link></li>
               <li><Link to="/faqs" className="hover:text-[var(--bronze-soft)]">FAQs</Link></li>
               <li><Link to="/contact" className="hover:text-[var(--bronze-soft)]">Contact</Link></li>
