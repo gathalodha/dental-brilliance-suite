@@ -5,8 +5,12 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
   { to: "/treatments", label: "Treatments" },
-  { to: "/doctors", label: "Our Doctors" },
+  { to: "/doctors", label: "Doctors" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/blog", label: "Journal" },
+  { to: "/faqs", label: "FAQs" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
