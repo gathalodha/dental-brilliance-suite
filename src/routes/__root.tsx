@@ -123,6 +123,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
       </div>
+      <Toaster />
     </QueryClientProvider>
   );
 }
