@@ -67,7 +67,7 @@ export function SiteHeader() {
 
         <button
           aria-label={open ? "Close menu" : "Open menu"}
-          className="grid size-10 place-items-center rounded-full border border-border md:hidden"
+          className="grid size-10 place-items-center rounded-full border border-border lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -75,7 +75,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <div className="container-px mx-auto max-w-7xl border-t border-border/60 py-4">
             <div className="flex flex-col gap-1">
               {nav.map((n) => (
