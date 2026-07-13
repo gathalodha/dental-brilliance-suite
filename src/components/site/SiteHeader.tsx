@@ -5,8 +5,12 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
   { to: "/treatments", label: "Treatments" },
-  { to: "/doctors", label: "Our Doctors" },
+  { to: "/doctors", label: "Doctors" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/blog", label: "Journal" },
+  { to: "/faqs", label: "FAQs" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -34,7 +38,7 @@ export function SiteHeader() {
           <span className="font-display text-xl tracking-tight">Maison Dentaire</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {nav.map((n) => (
             <Link
               key={n.to}
@@ -48,7 +52,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <a href="tel:+15551234567" className="inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-accent">
             <Phone className="size-4" />
             (555) 123-4567
@@ -63,7 +67,7 @@ export function SiteHeader() {
 
         <button
           aria-label={open ? "Close menu" : "Open menu"}
-          className="grid size-10 place-items-center rounded-full border border-border md:hidden"
+          className="grid size-10 place-items-center rounded-full border border-border lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -71,7 +75,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <div className="container-px mx-auto max-w-7xl border-t border-border/60 py-4">
             <div className="flex flex-col gap-1">
               {nav.map((n) => (
