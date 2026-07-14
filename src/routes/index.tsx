@@ -57,7 +57,7 @@ function HomePage() {
               transition={{ duration: 0.6 }}
               className="text-xs uppercase tracking-[0.35em] text-accent"
             >
-              Boutique Dental Practice
+              {brandLine}
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -65,7 +65,7 @@ function HomePage() {
               transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
               className="mt-5 text-balance text-5xl leading-[1.02] md:text-7xl"
             >
-              A quieter kind of <em className="italic text-accent">dentistry.</em>
+              {heading}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
