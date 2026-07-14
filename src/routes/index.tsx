@@ -211,18 +211,18 @@ function HomePage() {
           </Reveal>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {treatments.map((t, i) => (
-              <Reveal key={t.title} delay={i * 0.08}>
+            {(treatments ?? []).slice(0, 3).map((t: any, i: number) => (
+              <Reveal key={t.id} delay={i * 0.08}>
                 <motion.div
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.3 }}
                   className="group relative flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 transition-shadow hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]"
                 >
                   <div className="grid size-12 place-items-center rounded-2xl bg-secondary text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                    <t.icon className="size-5" />
+                    <Sparkles className="size-5" />
                   </div>
-                  <h3 className="mt-6 text-2xl">{t.title}</h3>
-                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.desc}</p>
+                  <h3 className="mt-6 text-2xl">{t.name}</h3>
+                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.description}</p>
                   <Link to="/treatments" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent">
                     Learn more <ArrowRight className="size-4" />
                   </Link>
@@ -271,20 +271,19 @@ function HomePage() {
           </Reveal>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <Reveal key={t.author} delay={i * 0.08}>
+            {(testimonials ?? []).slice(0, 3).map((t: any, i: number) => (
+              <Reveal key={t.id} delay={i * 0.08}>
                 <div className="flex h-full flex-col rounded-3xl border border-ivory/10 bg-ivory/[0.03] p-8 backdrop-blur">
                   <div className="flex gap-1 text-[var(--bronze-soft)]">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="size-4 fill-current" />
+                    {Array.from({ length: t.rating ?? 5 }).map((_, j) => (
+                      <Star key={j} className="size-4 fill-current" />
                     ))}
                   </div>
                   <p className="mt-5 flex-1 font-display text-xl leading-snug text-ivory/95">
-                    "{t.quote}"
+                    "{t.review}"
                   </p>
                   <div className="mt-6 border-t border-ivory/10 pt-4">
-                    <div className="text-sm text-ivory">{t.author}</div>
-                    <div className="text-xs text-ivory/60">{t.meta}</div>
+                    <div className="text-sm text-ivory">{t.patient_name}</div>
                   </div>
                 </div>
               </Reveal>
