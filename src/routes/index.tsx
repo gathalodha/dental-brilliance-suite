@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, ShieldCheck, HeartPulse, Star, Phone, Clock, Award } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
 import heroImage from "@/assets/hero-clinic.jpg";
 import { Reveal } from "@/components/site/Reveal";
+import { useHeroContent, useAboutContent, useTreatments, useTestimonials } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,19 +17,6 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const treatments = [
-  { title: "Cosmetic Dentistry", desc: "Veneers, whitening and smile design tailored to your face.", icon: Sparkles },
-  { title: "Restorative Care", desc: "Crowns, bridges, and same-day ceramic restorations.", icon: ShieldCheck },
-  { title: "Preventive Health", desc: "Hygiene, exams and long-term wellness planning.", icon: HeartPulse },
-];
-
-const stats = [
-  { value: "18+", label: "Years of practice" },
-  { value: "12k", label: "Smiles cared for" },
-  { value: "4.9★", label: "Patient rating" },
-  { value: "6", label: "Board specialists" },
-];
-
 const reasons = [
   { title: "Considered design", desc: "A quiet, sunlit space designed to slow your heart rate the moment you arrive." },
   { title: "Clinical excellence", desc: "Board-certified specialists using digital imaging and minimally invasive protocols." },
@@ -36,13 +24,27 @@ const reasons = [
   { title: "Concierge scheduling", desc: "Same-week appointments, private rooms, and end-to-end coordination." },
 ];
 
-const testimonials = [
-  { quote: "The most calming dental visit I've ever had. The results are extraordinary.", author: "Amelia R.", meta: "Veneers patient" },
-  { quote: "Dr. Chen took the time to actually listen. My whole treatment felt bespoke.", author: "Julian M.", meta: "Invisalign" },
-  { quote: "Every detail feels intentional — from the music to the aftercare notes.", author: "Priya S.", meta: "Whitening" },
-];
-
 function HomePage() {
+  const { data: hero } = useHeroContent();
+  const { data: about } = useAboutContent();
+  const { data: treatments } = useTreatments();
+  const { data: testimonials } = useTestimonials();
+
+  const brandLine = hero?.brand_line ?? "Boutique Dental Practice";
+  const heading = hero?.heading ?? "A quieter kind of dentistry.";
+  const subheading = hero?.subheading ?? "Clinical excellence meets considered design.";
+  const heroImg = hero?.image_url || heroImage;
+  const primary = { text: hero?.cta_text ?? "Book a consultation", link: hero?.cta_link ?? "/contact", show: hero?.cta_enabled ?? true };
+  const secondary = { text: hero?.secondary_cta_text ?? "Explore treatments", link: hero?.secondary_cta_link ?? "/treatments", show: hero?.secondary_cta_enabled ?? true };
+
+  const stats = [
+    { value: `${about?.stat_years ?? 18}+`, label: "Years of practice" },
+    { value: `${(about?.stat_patients ?? 12000).toLocaleString()}`, label: "Smiles cared for" },
+    { value: "4.9★", label: "Patient rating" },
+    { value: `${about?.stat_treatments ?? 6}`, label: "Board specialists" },
+  ];
+
+
   return (
     <div className="overflow-hidden">
       {/* HERO */}
@@ -55,7 +57,7 @@ function HomePage() {
               transition={{ duration: 0.6 }}
               className="text-xs uppercase tracking-[0.35em] text-accent"
             >
-              Boutique Dental Practice
+              {brandLine}
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -63,7 +65,7 @@ function HomePage() {
               transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
               className="mt-5 text-balance text-5xl leading-[1.02] md:text-7xl"
             >
-              A quieter kind of <em className="italic text-accent">dentistry.</em>
+              {heading}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -71,8 +73,7 @@ function HomePage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="mt-6 max-w-lg text-lg text-muted-foreground"
             >
-              Clinical excellence meets considered design. Our team crafts calm,
-              personalised care — from your first hygiene visit to a fully bespoke smile.
+              {subheading}
             </motion.p>
 
             <motion.div
@@ -81,19 +82,23 @@ function HomePage() {
               transition={{ duration: 0.8, delay: 0.35 }}
               className="mt-9 flex flex-wrap items-center gap-3"
             >
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground transition-all hover:bg-accent"
-              >
-                Book a consultation
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/treatments"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
-              >
-                Explore treatments
-              </Link>
+              {primary.show && (
+                <a
+                  href={primary.link}
+                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground transition-all hover:bg-accent"
+                >
+                  {primary.text}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </a>
+              )}
+              {secondary.show && (
+                <a
+                  href={secondary.link}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  {secondary.text}
+                </a>
+              )}
             </motion.div>
 
             <motion.div
@@ -116,7 +121,7 @@ function HomePage() {
           >
             <div className="relative overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_color-mix(in_oklab,var(--cocoa)_45%,transparent)]">
               <img
-                src={heroImage}
+                src={heroImg}
                 alt="Serene modern dental clinic interior"
                 className="h-[520px] w-full object-cover md:h-[640px]"
               />
@@ -180,10 +185,10 @@ function HomePage() {
           <Reveal delay={0.1}>
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-secondary">
-                <img src={heroImage} alt="" className="size-full object-cover" />
+                <img src={about?.image_url || heroImage} alt="" className="size-full object-cover" />
               </div>
               <div className="mt-10 aspect-[3/4] overflow-hidden rounded-2xl bg-secondary">
-                <img src={heroImage} alt="" className="size-full object-cover" />
+                <img src={about?.image_url || heroImage} alt="" className="size-full object-cover" />
               </div>
             </div>
           </Reveal>
@@ -206,18 +211,18 @@ function HomePage() {
           </Reveal>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {treatments.map((t, i) => (
-              <Reveal key={t.title} delay={i * 0.08}>
+            {(treatments ?? []).slice(0, 3).map((t: any, i: number) => (
+              <Reveal key={t.id} delay={i * 0.08}>
                 <motion.div
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.3 }}
                   className="group relative flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 transition-shadow hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]"
                 >
                   <div className="grid size-12 place-items-center rounded-2xl bg-secondary text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                    <t.icon className="size-5" />
+                    <Sparkles className="size-5" />
                   </div>
-                  <h3 className="mt-6 text-2xl">{t.title}</h3>
-                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.desc}</p>
+                  <h3 className="mt-6 text-2xl">{t.name}</h3>
+                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.description}</p>
                   <Link to="/treatments" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent">
                     Learn more <ArrowRight className="size-4" />
                   </Link>
@@ -266,20 +271,19 @@ function HomePage() {
           </Reveal>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <Reveal key={t.author} delay={i * 0.08}>
+            {(testimonials ?? []).slice(0, 3).map((t: any, i: number) => (
+              <Reveal key={t.id} delay={i * 0.08}>
                 <div className="flex h-full flex-col rounded-3xl border border-ivory/10 bg-ivory/[0.03] p-8 backdrop-blur">
                   <div className="flex gap-1 text-[var(--bronze-soft)]">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="size-4 fill-current" />
+                    {Array.from({ length: t.rating ?? 5 }).map((_, j) => (
+                      <Star key={j} className="size-4 fill-current" />
                     ))}
                   </div>
                   <p className="mt-5 flex-1 font-display text-xl leading-snug text-ivory/95">
-                    "{t.quote}"
+                    "{t.review}"
                   </p>
                   <div className="mt-6 border-t border-ivory/10 pt-4">
-                    <div className="text-sm text-ivory">{t.author}</div>
-                    <div className="text-xs text-ivory/60">{t.meta}</div>
+                    <div className="text-sm text-ivory">{t.patient_name}</div>
                   </div>
                 </div>
               </Reveal>
