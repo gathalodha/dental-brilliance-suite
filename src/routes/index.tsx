@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, ShieldCheck, HeartPulse, Star, Phone, Clock, Award } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
 import heroImage from "@/assets/hero-clinic.jpg";
 import { Reveal } from "@/components/site/Reveal";
+import { useHeroContent, useAboutContent, useTreatments, useTestimonials } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,19 +17,6 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const treatments = [
-  { title: "Cosmetic Dentistry", desc: "Veneers, whitening and smile design tailored to your face.", icon: Sparkles },
-  { title: "Restorative Care", desc: "Crowns, bridges, and same-day ceramic restorations.", icon: ShieldCheck },
-  { title: "Preventive Health", desc: "Hygiene, exams and long-term wellness planning.", icon: HeartPulse },
-];
-
-const stats = [
-  { value: "18+", label: "Years of practice" },
-  { value: "12k", label: "Smiles cared for" },
-  { value: "4.9★", label: "Patient rating" },
-  { value: "6", label: "Board specialists" },
-];
-
 const reasons = [
   { title: "Considered design", desc: "A quiet, sunlit space designed to slow your heart rate the moment you arrive." },
   { title: "Clinical excellence", desc: "Board-certified specialists using digital imaging and minimally invasive protocols." },
@@ -36,13 +24,27 @@ const reasons = [
   { title: "Concierge scheduling", desc: "Same-week appointments, private rooms, and end-to-end coordination." },
 ];
 
-const testimonials = [
-  { quote: "The most calming dental visit I've ever had. The results are extraordinary.", author: "Amelia R.", meta: "Veneers patient" },
-  { quote: "Dr. Chen took the time to actually listen. My whole treatment felt bespoke.", author: "Julian M.", meta: "Invisalign" },
-  { quote: "Every detail feels intentional — from the music to the aftercare notes.", author: "Priya S.", meta: "Whitening" },
-];
-
 function HomePage() {
+  const { data: hero } = useHeroContent();
+  const { data: about } = useAboutContent();
+  const { data: treatments } = useTreatments();
+  const { data: testimonials } = useTestimonials();
+
+  const brandLine = hero?.brand_line ?? "Boutique Dental Practice";
+  const heading = hero?.heading ?? "A quieter kind of dentistry.";
+  const subheading = hero?.subheading ?? "Clinical excellence meets considered design.";
+  const heroImg = hero?.image_url || heroImage;
+  const primary = { text: hero?.cta_text ?? "Book a consultation", link: hero?.cta_link ?? "/contact", show: hero?.cta_enabled ?? true };
+  const secondary = { text: hero?.secondary_cta_text ?? "Explore treatments", link: hero?.secondary_cta_link ?? "/treatments", show: hero?.secondary_cta_enabled ?? true };
+
+  const stats = [
+    { value: `${about?.stat_years ?? 18}+`, label: "Years of practice" },
+    { value: `${(about?.stat_patients ?? 12000).toLocaleString()}`, label: "Smiles cared for" },
+    { value: "4.9★", label: "Patient rating" },
+    { value: `${about?.stat_treatments ?? 6}`, label: "Board specialists" },
+  ];
+
+
   return (
     <div className="overflow-hidden">
       {/* HERO */}
