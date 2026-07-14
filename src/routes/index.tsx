@@ -73,8 +73,7 @@ function HomePage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="mt-6 max-w-lg text-lg text-muted-foreground"
             >
-              Clinical excellence meets considered design. Our team crafts calm,
-              personalised care — from your first hygiene visit to a fully bespoke smile.
+              {subheading}
             </motion.p>
 
             <motion.div
@@ -83,19 +82,23 @@ function HomePage() {
               transition={{ duration: 0.8, delay: 0.35 }}
               className="mt-9 flex flex-wrap items-center gap-3"
             >
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground transition-all hover:bg-accent"
-              >
-                Book a consultation
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/treatments"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
-              >
-                Explore treatments
-              </Link>
+              {primary.show && (
+                <a
+                  href={primary.link}
+                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground transition-all hover:bg-accent"
+                >
+                  {primary.text}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </a>
+              )}
+              {secondary.show && (
+                <a
+                  href={secondary.link}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-transparent px-6 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  {secondary.text}
+                </a>
+              )}
             </motion.div>
 
             <motion.div
