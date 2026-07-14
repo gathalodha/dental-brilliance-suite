@@ -121,7 +121,7 @@ function HomePage() {
           >
             <div className="relative overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_color-mix(in_oklab,var(--cocoa)_45%,transparent)]">
               <img
-                src={heroImage}
+                src={heroImg}
                 alt="Serene modern dental clinic interior"
                 className="h-[520px] w-full object-cover md:h-[640px]"
               />
@@ -185,10 +185,10 @@ function HomePage() {
           <Reveal delay={0.1}>
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-secondary">
-                <img src={heroImage} alt="" className="size-full object-cover" />
+                <img src={about?.image_url || heroImage} alt="" className="size-full object-cover" />
               </div>
               <div className="mt-10 aspect-[3/4] overflow-hidden rounded-2xl bg-secondary">
-                <img src={heroImage} alt="" className="size-full object-cover" />
+                <img src={about?.image_url || heroImage} alt="" className="size-full object-cover" />
               </div>
             </div>
           </Reveal>
