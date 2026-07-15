@@ -200,10 +200,11 @@ function AdminPage() {
               table="gallery_images"
               queryKey={contentKeys.gallery}
               title="Gallery"
-              emptyRow={{ image_url: "", caption: "", visible: true }}
+              emptyRow={{ image_url: "", caption: "", category: "", visible: true }}
               fields={[
                 { key: "image_url", label: "Image", type: "image" },
                 { key: "caption", label: "Caption" },
+                { key: "category", label: "Category (e.g. studio, smiles, moments)" },
                 { key: "visible", label: "Visible", type: "boolean" },
               ]}
             />
@@ -219,6 +220,8 @@ function AdminPage() {
                 { key: "review", label: "Review", type: "textarea" },
                 { key: "rating", label: "Rating (1–5)", type: "number" },
                 { key: "image_url", label: "Patient image", type: "image" },
+                { key: "treatment_type", label: "Treatment type" },
+                { key: "review_date", label: "Review date", type: "date" },
                 { key: "visible", label: "Visible", type: "boolean" },
               ]}
             />
@@ -232,6 +235,7 @@ function AdminPage() {
               fields={[
                 { key: "question", label: "Question" },
                 { key: "answer", label: "Answer", type: "textarea" },
+                { key: "category", label: "Category (groups FAQs on the page)" },
                 { key: "visible", label: "Visible", type: "boolean" },
               ]}
             />
@@ -272,17 +276,27 @@ function AdminPage() {
 
 const treatmentFields: FieldDef[] = [
   { key: "name", label: "Name" },
+  { key: "short_description", label: "Short description" },
   { key: "description", label: "Description", type: "textarea" },
-  { key: "image_url", label: "Image", type: "image" },
+  { key: "image_url", label: "Featured image", type: "image" },
+  { key: "duration", label: "Duration (e.g. 60 min, 2–3 visits)" },
+  { key: "tags", label: "Tags", type: "array", placeholder: "Cosmetic, 60 min" },
+  { key: "benefits", label: "Benefits", type: "array", placeholder: "Comma separated" },
+  { key: "procedure_details", label: "Procedure details", type: "textarea" },
+  { key: "cta_text", label: "CTA button text" },
+  { key: "cta_link", label: "CTA button link", type: "url" },
   { key: "visible", label: "Visible", type: "boolean" },
 ];
 
 const doctorFields: FieldDef[] = [
   { key: "name", label: "Name" },
+  { key: "role_label", label: "Role label (shown on card)" },
   { key: "qualification", label: "Qualification" },
   { key: "specialization", label: "Specialization" },
   { key: "experience", label: "Experience" },
   { key: "bio", label: "Bio", type: "textarea" },
+  { key: "focus", label: "Focus areas", type: "array", placeholder: "Veneers, Smile Design" },
+  { key: "consultation_details", label: "Consultation details" },
   { key: "image_url", label: "Profile image", type: "image" },
   { key: "visible", label: "Visible", type: "boolean" },
 ];

@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Reveal } from "@/components/site/Reveal";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFaqs } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/faqs")({
   head: () => ({
@@ -16,72 +17,55 @@ export const Route = createFileRoute("/faqs")({
   component: FaqPage,
 });
 
-const groups = [
-  {
-    title: "Your first visit",
-    items: [
-      { q: "What happens at a first appointment?", a: "A relaxed 60-minute session: full exam, digital scans and X-rays, a conversation about your goals, and a written plan you can take home. Cosmetic consultations are complimentary." },
-      { q: "How far in advance should I book?", a: "We hold same-week appointments for existing patients and typically 1–2 weeks for new patients. Cosmetic consultations often have earlier availability." },
-      { q: "What should I bring?", a: "A list of current medications, any prior records or images if easy to share, and — if you have coverage — your insurance details. We'll take care of the rest." },
-    ],
-  },
-  {
-    title: "Comfort & experience",
-    items: [
-      { q: "Is dental treatment painful here?", a: "We design around comfort. Painless anaesthetic delivery, noise-cancelling headphones, weighted blankets and, for anxious patients, oral or IV sedation with a licensed anaesthetist." },
-      { q: "Do you treat nervous patients?", a: "Absolutely — many of our patients come to us after difficult experiences elsewhere. We move at your pace and always explain what's next." },
-      { q: "How long are appointments?", a: "Hygiene visits are 45–60 minutes. Restorative visits are 60–120 minutes. We never double-book." },
-    ],
-  },
-  {
-    title: "Cosmetic & restorative",
-    items: [
-      { q: "How long do veneers last?", a: "Well-designed porcelain veneers typically last 15–20 years with routine care. We plan each case for longevity, not just the first year." },
-      { q: "Do you offer Invisalign?", a: "Yes — we're certified providers and often use short-course aligners before cosmetic work to give a stronger, more conservative result." },
-      { q: "Are implants done in-house?", a: "Yes. Surgical placement, prosthetics and follow-up all happen under one roof, planned digitally end-to-end." },
-    ],
-  },
-  {
-    title: "Fees & financing",
-    items: [
-      { q: "Do you take insurance?", a: "We're an out-of-network provider and submit claims on your behalf so you receive the maximum reimbursement your plan allows." },
-      { q: "Do you offer financing?", a: "Yes — interest-free plans up to 12 months for treatments over $1,500, through our financing partner. Approval takes minutes." },
-      { q: "Will I get a written quote?", a: "Always. Every plan comes with an itemised, no-surprises estimate before we begin." },
-    ],
-  },
-];
-
 function FaqPage() {
+  const { data, isLoading } = useFaqs();
+  const faqs = (data ?? []) as any[];
+
+  const groups = useMemo(() => {
+    const map = new Map<string, any[]>();
+    faqs.forEach((f) => {
+      const key = f.category || "Questions";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(f);
+    });
+    return Array.from(map.entries()).map(([title, items]) => ({ title, items }));
+  }, [faqs]);
+
   return (
     <div>
       <section className="container-px mx-auto max-w-7xl pt-16 pb-12 md:pt-24">
         <Reveal>
           <p className="text-xs uppercase tracking-[0.35em] text-accent">FAQs</p>
           <h1 className="mt-4 max-w-3xl text-balance text-5xl leading-[1.05] md:text-7xl">
-            The questions we're <em className="italic text-accent">most often</em> asked.
+            Questions, <em className="italic text-accent">gently answered.</em>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Can't find what you're looking for?{" "}
-            <Link to="/contact" className="text-accent hover:underline">Get in touch</Link> — we're happy to talk it through.
+            Everything you might want to know about visiting us — and a few things we wish more people asked.
           </p>
         </Reveal>
       </section>
 
       <section className="container-px mx-auto max-w-4xl pb-24 md:pb-32">
-        <div className="space-y-14">
-          {groups.map((g, gi) => (
-            <Reveal key={g.title} delay={gi * 0.05}>
-              <div>
-                <h2 className="text-2xl md:text-3xl">{g.title}</h2>
-                <div className="mt-6 divide-y divide-border/60 rounded-[1.5rem] border border-border/60 bg-card">
-                  {g.items.map((item, i) => (
-                    <FaqItem key={i} q={item.q} a={item.a} />
-                  ))}
+        {isLoading ? (
+          <div className="flex justify-center py-20"><Loader2 className="size-6 animate-spin text-accent" /></div>
+        ) : groups.length === 0 ? (
+          <p className="text-center text-muted-foreground py-20">No FAQs yet.</p>
+        ) : (
+          <div className="space-y-14">
+            {groups.map((g, gi) => (
+              <Reveal key={g.title} delay={gi * 0.05}>
+                <div>
+                  <h2 className="text-2xl md:text-3xl">{g.title}</h2>
+                  <div className="mt-6 divide-y divide-border/60 rounded-[1.5rem] border border-border/60 bg-card">
+                    {g.items.map((item: any) => (
+                      <FaqItem key={item.id} q={item.question} a={item.answer} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+              </Reveal>
+            ))}
+          </div>
+        )}
 
         <Reveal>
           <div className="mt-16 rounded-[2rem] border border-border/60 bg-card p-8 text-center md:p-12">

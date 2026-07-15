@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
-import { Quote, Star } from "lucide-react";
+import { Quote, Star, Loader2 } from "lucide-react";
+import { useTestimonials } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/testimonials")({
   head: () => ({
@@ -14,19 +15,10 @@ export const Route = createFileRoute("/testimonials")({
   component: TestimonialsPage,
 });
 
-const testimonials = [
-  { name: "Amelia R.", role: "Cosmetic patient", body: "The most calm I've ever felt in a dental chair. The veneers look like they've always been mine. It's the small choices — the music, the lighting, how they explain each step — that make it feel completely different.", stars: 5 },
-  { name: "Julian K.", role: "Full-mouth restoration", body: "They took the time to plan properly. Two years in, everything still feels perfect. I had months of stalled treatment elsewhere before finding them — no regrets moving over.", stars: 5 },
-  { name: "Priya S.", role: "Hygiene & preventive", body: "Even a cleaning here feels like a small ritual. I actually look forward to my visits, which I never thought I'd say about dental appointments.", stars: 5 },
-  { name: "Marcus D.", role: "Invisalign", body: "Fifteen months, no fuss, and a result better than I imagined. Their planning up front made the whole process feel predictable.", stars: 5 },
-  { name: "Chiara L.", role: "Cosmetic bonding", body: "I came in for one small fix and left with a plan I actually understood. Nothing was pushed on me. Six months later I asked for the rest — on my terms.", stars: 5 },
-  { name: "Henry T.", role: "Implant patient", body: "Anxiety was my thing with dentists. IV sedation, a proper conversation beforehand, and a team that genuinely didn't rush. I'm a patient for life.", stars: 5 },
-  { name: "Sofia B.", role: "Hygiene", body: "The studio itself is beautiful, but what stays with me is how thoughtful everyone is. My hygienist actually remembers my life between visits.", stars: 5 },
-  { name: "Owen M.", role: "Veneers", body: "I researched cosmetic dentists for a year. This was the only practice where the consultation didn't feel like a sales meeting. That told me everything.", stars: 5 },
-  { name: "Isla V.", role: "Family patient", body: "We bring the whole family here now. Kids, teens, adults — same quiet standard for everyone. Rare and worth it.", stars: 5 },
-];
-
 function TestimonialsPage() {
+  const { data, isLoading } = useTestimonials();
+  const testimonials = (data ?? []) as any[];
+
   return (
     <div>
       <section className="container-px mx-auto max-w-7xl pt-16 pb-12 md:pt-24">
@@ -42,27 +34,47 @@ function TestimonialsPage() {
       </section>
 
       <section className="container-px mx-auto max-w-7xl pb-24">
-        <div className="columns-1 gap-5 md:columns-2 lg:columns-3">
-          {testimonials.map((t, i) => (
-            <Reveal key={t.name} delay={(i % 6) * 0.05}>
-              <figure className="mb-5 break-inside-avoid rounded-[1.5rem] border border-border/60 bg-card p-7">
-                <Quote className="size-6 text-accent" />
-                <blockquote className="mt-4 text-base leading-relaxed md:text-lg">
-                  {t.body}
-                </blockquote>
-                <div className="mt-5 flex items-center gap-1 text-accent">
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} className="size-4 fill-current" />
-                  ))}
-                </div>
-                <figcaption className="mt-3 text-sm">
-                  <span className="font-medium">{t.name}</span>
-                  <span className="text-muted-foreground"> — {t.role}</span>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-20"><Loader2 className="size-6 animate-spin text-accent" /></div>
+        ) : testimonials.length === 0 ? (
+          <p className="text-center text-muted-foreground py-20">No testimonials yet.</p>
+        ) : (
+          <div className="columns-1 gap-5 md:columns-2 lg:columns-3">
+            {testimonials.map((t: any, i: number) => {
+              const stars = Math.max(0, Math.min(5, Number(t.rating ?? 5)));
+              return (
+              <Reveal key={t.id} delay={(i % 6) * 0.05}>
+                <figure className="mb-5 break-inside-avoid rounded-[1.5rem] border border-border/60 bg-card p-7">
+                  <Quote className="size-6 text-accent" />
+                  <blockquote className="mt-4 text-base leading-relaxed md:text-lg">
+                    {t.review}
+                  </blockquote>
+                  <div className="mt-5 flex items-center gap-1 text-accent">
+                    {Array.from({ length: stars }).map((_, j) => (
+                      <Star key={j} className="size-4 fill-current" />
+                    ))}
+                  </div>
+                  <figcaption className="mt-3 flex items-center gap-3 text-sm">
+                    {t.image_url && (
+                      <img src={t.image_url} alt={t.patient_name} className="size-9 rounded-full object-cover" />
+                    )}
+                    <div>
+                      <div>
+                        <span className="font-medium">{t.patient_name}</span>
+                        {t.treatment_type && <span className="text-muted-foreground"> — {t.treatment_type}</span>}
+                      </div>
+                      {t.review_date && (
+                        <div className="text-xs text-muted-foreground">
+                          {new Date(t.review_date).toLocaleDateString(undefined, { year: "numeric", month: "long" })}
+                        </div>
+                      )}
+                    </div>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            );})}
+          </div>
+        )}
       </section>
 
       <section className="container-px mx-auto max-w-7xl pb-24 md:pb-32">

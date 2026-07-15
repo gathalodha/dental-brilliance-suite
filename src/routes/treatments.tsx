@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, HeartPulse, Smile, Wand2, Baby, Stethoscope, Gem } from "lucide-react";
+import { ArrowRight, Sparkles, Loader2 } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
+import { useTreatments } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/treatments")({
   head: () => ({
@@ -14,58 +15,9 @@ export const Route = createFileRoute("/treatments")({
   component: TreatmentsPage,
 });
 
-const categories = [
-  {
-    icon: Sparkles,
-    title: "Porcelain Veneers",
-    desc: "Bespoke, hand-crafted veneers designed around your facial proportions and natural translucency.",
-    tags: ["Cosmetic", "2–3 visits"],
-  },
-  {
-    icon: Wand2,
-    title: "Professional Whitening",
-    desc: "In-chair and take-home whitening protocols with enamel-safe formulations.",
-    tags: ["Cosmetic", "60 min"],
-  },
-  {
-    icon: Smile,
-    title: "Invisalign & Clear Aligners",
-    desc: "Discreet orthodontic treatment with digital treatment planning and photo progress reviews.",
-    tags: ["Orthodontics", "6–18 months"],
-  },
-  {
-    icon: Gem,
-    title: "Ceramic Crowns & Onlays",
-    desc: "Same-day CEREC restorations milled and glazed in-house.",
-    tags: ["Restorative", "1 visit"],
-  },
-  {
-    icon: ShieldCheck,
-    title: "Dental Implants",
-    desc: "Full-arch and single-tooth implants planned with 3D imaging and guided surgery.",
-    tags: ["Surgical", "Staged"],
-  },
-  {
-    icon: HeartPulse,
-    title: "Hygiene & Preventive",
-    desc: "Gentle cleanings, digital exams and long-term wellness planning.",
-    tags: ["Preventive", "45–60 min"],
-  },
-  {
-    icon: Stethoscope,
-    title: "Root Canal Therapy",
-    desc: "Microscope-assisted endodontics with a focus on comfort and outcomes.",
-    tags: ["Endodontics", "1–2 visits"],
-  },
-  {
-    icon: Baby,
-    title: "Family & Pediatric",
-    desc: "Gentle, unhurried care for children in a calm, welcoming environment.",
-    tags: ["Family", "Any age"],
-  },
-];
-
 function TreatmentsPage() {
+  const { data: treatments, isLoading } = useTreatments();
+
   return (
     <div>
       <section className="container-px mx-auto max-w-7xl pt-16 pb-16 md:pt-24">
@@ -82,24 +34,55 @@ function TreatmentsPage() {
       </section>
 
       <section className="container-px mx-auto max-w-7xl pb-24 md:pb-32">
+        {isLoading ? (
+          <div className="flex justify-center py-20"><Loader2 className="size-6 animate-spin text-accent" /></div>
+        ) : !treatments || treatments.length === 0 ? (
+          <p className="text-center text-muted-foreground py-20">No treatments to show yet.</p>
+        ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {categories.map((c, i) => (
-            <Reveal key={c.title} delay={(i % 3) * 0.06}>
+          {treatments.map((c: any, i: number) => {
+            const tags: string[] = [
+              ...(Array.isArray(c.tags) ? c.tags : []),
+              ...(c.duration ? [c.duration] : []),
+            ];
+            return (
+            <Reveal key={c.id} delay={(i % 3) * 0.06}>
               <div className="group flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]">
-                <div className="grid size-12 place-items-center rounded-2xl bg-secondary text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                  <c.icon className="size-5" />
-                </div>
-                <h3 className="mt-6 text-2xl">{c.title}</h3>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{c.desc}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {c.tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground">{tag}</span>
-                  ))}
-                </div>
+                {c.image_url ? (
+                  <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                    <img src={c.image_url} alt={c.name} className="size-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  </div>
+                ) : (
+                  <div className="grid size-12 place-items-center rounded-2xl bg-secondary text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                    <Sparkles className="size-5" />
+                  </div>
+                )}
+                <h3 className="mt-6 text-2xl">{c.name}</h3>
+                <p className="mt-3 flex-1 text-sm text-muted-foreground">{c.short_description || c.description}</p>
+                {Array.isArray(c.benefits) && c.benefits.length > 0 && (
+                  <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+                    {c.benefits.map((b: string) => (
+                      <li key={b} className="flex gap-2"><span className="text-accent">•</span>{b}</li>
+                    ))}
+                  </ul>
+                )}
+                {tags.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <span key={tag} className="rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground">{tag}</span>
+                    ))}
+                  </div>
+                )}
+                {c.cta_text && (
+                  <Link to={c.cta_link || "/contact"} className="mt-6 inline-flex items-center gap-2 text-sm text-accent hover:underline">
+                    {c.cta_text} <ArrowRight className="size-4" />
+                  </Link>
+                )}
               </div>
             </Reveal>
-          ))}
+          );})}
         </div>
+        )}
       </section>
 
       <section className="container-px mx-auto max-w-7xl pb-24 md:pb-32">
