@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { uploadMedia } from "@/lib/media";
 import { Loader2, Upload, Trash2, Plus, ArrowUp, ArrowDown } from "lucide-react";
 
-type FieldType = "text" | "textarea" | "number" | "url" | "boolean" | "image";
+type FieldType = "text" | "textarea" | "number" | "url" | "boolean" | "image" | "array" | "date";
 
 export type FieldDef = {
   key: string;
@@ -236,6 +236,14 @@ function FieldInput({ field, value, onChange }: { field: FieldDef; value: any; o
     );
   if (t === "number") return wrap(<Input type="number" value={value ?? ""} onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))} />);
   if (t === "image") return wrap(<ImageInput value={value} onChange={onChange} />);
+  if (t === "date") return wrap(<Input type="date" value={value ?? ""} onChange={(e) => onChange(e.target.value || null)} />);
+  if (t === "array") {
+    const str = Array.isArray(value) ? value.join(", ") : (value ?? "");
+    return wrap(<Input value={str} placeholder={field.placeholder ?? "comma, separated, values"} onChange={(e) => {
+      const arr = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+      onChange(arr);
+    }} />);
+  }
   return wrap(<Input type={t === "url" ? "url" : "text"} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder} />);
 }
 
