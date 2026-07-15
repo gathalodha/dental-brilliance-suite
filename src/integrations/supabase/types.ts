@@ -110,39 +110,51 @@ export type Database = {
       doctors: {
         Row: {
           bio: string | null
+          consultation_details: string | null
           created_at: string
           display_order: number
           experience: string | null
+          focus: string[] | null
           id: string
           image_url: string | null
           name: string
           qualification: string | null
+          role_label: string | null
+          social_links: Json | null
           specialization: string | null
           updated_at: string
           visible: boolean
         }
         Insert: {
           bio?: string | null
+          consultation_details?: string | null
           created_at?: string
           display_order?: number
           experience?: string | null
+          focus?: string[] | null
           id?: string
           image_url?: string | null
           name: string
           qualification?: string | null
+          role_label?: string | null
+          social_links?: Json | null
           specialization?: string | null
           updated_at?: string
           visible?: boolean
         }
         Update: {
           bio?: string | null
+          consultation_details?: string | null
           created_at?: string
           display_order?: number
           experience?: string | null
+          focus?: string[] | null
           id?: string
           image_url?: string | null
           name?: string
           qualification?: string | null
+          role_label?: string | null
+          social_links?: Json | null
           specialization?: string | null
           updated_at?: string
           visible?: boolean
@@ -152,6 +164,7 @@ export type Database = {
       faqs: {
         Row: {
           answer: string
+          category: string | null
           created_at: string
           display_order: number
           id: string
@@ -161,6 +174,7 @@ export type Database = {
         }
         Insert: {
           answer: string
+          category?: string | null
           created_at?: string
           display_order?: number
           id?: string
@@ -170,6 +184,7 @@ export type Database = {
         }
         Update: {
           answer?: string
+          category?: string | null
           created_at?: string
           display_order?: number
           id?: string
@@ -257,6 +272,7 @@ export type Database = {
       gallery_images: {
         Row: {
           caption: string | null
+          category: string | null
           created_at: string
           display_order: number
           id: string
@@ -266,6 +282,7 @@ export type Database = {
         }
         Insert: {
           caption?: string | null
+          category?: string | null
           created_at?: string
           display_order?: number
           id?: string
@@ -275,6 +292,7 @@ export type Database = {
         }
         Update: {
           caption?: string | null
+          category?: string | null
           created_at?: string
           display_order?: number
           id?: string
@@ -482,6 +500,8 @@ export type Database = {
           patient_name: string
           rating: number
           review: string
+          review_date: string | null
+          treatment_type: string | null
           updated_at: string
           visible: boolean
         }
@@ -493,6 +513,8 @@ export type Database = {
           patient_name: string
           rating?: number
           review: string
+          review_date?: string | null
+          treatment_type?: string | null
           updated_at?: string
           visible?: boolean
         }
@@ -504,6 +526,8 @@ export type Database = {
           patient_name?: string
           rating?: number
           review?: string
+          review_date?: string | null
+          treatment_type?: string | null
           updated_at?: string
           visible?: boolean
         }
@@ -511,32 +535,53 @@ export type Database = {
       }
       treatments: {
         Row: {
+          benefits: string[] | null
           created_at: string
+          cta_link: string | null
+          cta_text: string | null
           description: string | null
           display_order: number
+          duration: string | null
           id: string
           image_url: string | null
           name: string
+          procedure_details: string | null
+          short_description: string | null
+          tags: string[] | null
           updated_at: string
           visible: boolean
         }
         Insert: {
+          benefits?: string[] | null
           created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
           description?: string | null
           display_order?: number
+          duration?: string | null
           id?: string
           image_url?: string | null
           name: string
+          procedure_details?: string | null
+          short_description?: string | null
+          tags?: string[] | null
           updated_at?: string
           visible?: boolean
         }
         Update: {
+          benefits?: string[] | null
           created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
           description?: string | null
           display_order?: number
+          duration?: string | null
           id?: string
           image_url?: string | null
           name?: string
+          procedure_details?: string | null
+          short_description?: string | null
+          tags?: string[] | null
           updated_at?: string
           visible?: boolean
         }
