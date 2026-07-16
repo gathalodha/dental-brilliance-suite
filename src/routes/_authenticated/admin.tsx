@@ -16,26 +16,64 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
-const SECTIONS = [
-  "Overview",
-  "Bookings",
-  "Hero",
-  "About",
-  "Site Settings",
-  "Footer",
-  "Navigation",
-  "Treatments",
-  "Doctors",
-  "Gallery",
-  "Testimonials",
-  "FAQs",
-  "Social Links",
-  "Footer Links",
-  "Media Library",
-  "Admins",
-] as const;
+type Section =
+  | "Overview"
+  | "Bookings"
+  | "Hero"
+  | "About"
+  | "Site Settings"
+  | "Footer"
+  | "Navigation"
+  | "Treatments"
+  | "Doctors"
+  | "Gallery"
+  | "Testimonials"
+  | "FAQs"
+  | "Social Links"
+  | "Footer Links"
+  | "Media Library"
+  | "Admins";
 
-type Section = (typeof SECTIONS)[number];
+type NavGroup = { label: string; items: { label: string; section: Section }[] };
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    label: "Dashboard",
+    items: [
+      { label: "Overview", section: "Overview" },
+      { label: "Bookings", section: "Bookings" },
+    ],
+  },
+  {
+    label: "Pages",
+    items: [
+      { label: "Home — Hero", section: "Hero" },
+      { label: "About", section: "About" },
+      { label: "Doctors", section: "Doctors" },
+      { label: "Treatments", section: "Treatments" },
+      { label: "Gallery", section: "Gallery" },
+      { label: "Testimonials", section: "Testimonials" },
+      { label: "FAQs", section: "FAQs" },
+    ],
+  },
+  {
+    label: "Shared Website Content",
+    items: [
+      { label: "Site Settings & SEO", section: "Site Settings" },
+      { label: "Navigation Menu", section: "Navigation" },
+      { label: "Footer Content", section: "Footer" },
+      { label: "Footer Links", section: "Footer Links" },
+      { label: "Social Links", section: "Social Links" },
+    ],
+  },
+  {
+    label: "System",
+    items: [
+      { label: "Media Library", section: "Media Library" },
+      { label: "Admins", section: "Admins" },
+    ],
+  },
+];
 
 function AdminPage() {
   const { user, signOut } = useAuth();
@@ -59,18 +97,25 @@ function AdminPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[220px_1fr]">
-        <nav className="flex flex-row flex-wrap gap-1 md:flex-col">
-          {SECTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => setSection(s)}
-              className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                section === s ? "bg-primary text-primary-foreground" : "hover:bg-secondary"
-              }`}
-            >
-              {s}
-            </button>
+      <div className="grid gap-6 md:grid-cols-[260px_1fr]">
+        <nav className="flex flex-col gap-5">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label} className="flex flex-col gap-1">
+              <p className="px-3 pb-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                {group.label}
+              </p>
+              {group.items.map((item) => (
+                <button
+                  key={item.section}
+                  onClick={() => setSection(item.section)}
+                  className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                    section === item.section ? "bg-primary text-primary-foreground" : "hover:bg-secondary"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           ))}
         </nav>
 
