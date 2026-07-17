@@ -2,13 +2,20 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useNavigation, useSiteSettings } from "@/hooks/useContent";
+import { useNavigation, useSiteSettings, usePageVisibility, slugFromHref, isPageVisible } from "@/hooks/useContent";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { data: nav } = useNavigation();
+  const { data: pageVis } = usePageVisibility();
   const { data: settings } = useSiteSettings();
+
+  const visibleNav = (nav ?? []).filter((n: any) => {
+    const slug = slugFromHref(n.href);
+    if (!slug) return true;
+    return isPageVisible(pageVis, slug);
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

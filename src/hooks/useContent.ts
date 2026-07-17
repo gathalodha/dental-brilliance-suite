@@ -70,7 +70,7 @@ export function usePageVisibility() {
         .select("*")
         .order("display_order", { ascending: true });
       if (error) throw error;
-      return (data ?? []) as PageVisibilityRow[];
+      return ((data ?? []) as unknown) as PageVisibilityRow[];
     },
   });
 }
