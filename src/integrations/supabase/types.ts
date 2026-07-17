@@ -380,6 +380,30 @@ export type Database = {
         }
         Relationships: []
       }
+      page_visibility: {
+        Row: {
+          display_order: number
+          label: string
+          slug: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          display_order?: number
+          label: string
+          slug: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          display_order?: number
+          label?: string
+          slug?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string | null
@@ -387,6 +411,7 @@ export type Database = {
           call_button_link: string | null
           clinic_name: string
           email: string | null
+          emergency_phone: string | null
           favicon_url: string | null
           google_maps_embed: string | null
           google_maps_link: string | null
@@ -413,6 +438,7 @@ export type Database = {
           call_button_link?: string | null
           clinic_name?: string
           email?: string | null
+          emergency_phone?: string | null
           favicon_url?: string | null
           google_maps_embed?: string | null
           google_maps_link?: string | null
@@ -439,6 +465,7 @@ export type Database = {
           call_button_link?: string | null
           clinic_name?: string
           email?: string | null
+          emergency_phone?: string | null
           favicon_url?: string | null
           google_maps_embed?: string | null
           google_maps_link?: string | null
