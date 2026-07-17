@@ -5,6 +5,8 @@ import { Reveal } from "@/components/site/Reveal";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useSiteSettings } from "@/hooks/useContent";
+import { PageGate } from "@/components/site/PageGate";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -15,7 +17,11 @@ export const Route = createFileRoute("/contact")({
       { property: "og:description", content: "Book a consultation or contact our team." },
     ],
   }),
-  component: ContactPage,
+  component: () => (
+    <PageGate slug="contact">
+      <ContactPage />
+    </PageGate>
+  ),
 });
 
 const schema = z.object({
@@ -31,6 +37,13 @@ function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const { data: settings } = useSiteSettings();
+  const address = settings?.address ?? "";
+  const phone = settings?.phone ?? "";
+  const email = settings?.email ?? "";
+  const emergency = settings?.emergency_phone ?? "";
+  const mapEmbed = settings?.google_maps_embed as string | null | undefined;
+  const mapLink = settings?.google_maps_link as string | null | undefined;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
