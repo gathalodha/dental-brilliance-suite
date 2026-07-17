@@ -495,3 +495,66 @@ VALUES ('new-admin@example.com');`}
     </Card>
   );
 }
+
+function PageVisibilityEditor() {
+  const qc = useQueryClient();
+  const { data, isLoading } = useQuery({
+    queryKey: contentKeys.pageVisibility,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("page_visibility" as any)
+        .select("*")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
+  const toggle = useMutation({
+    mutationFn: async ({ slug, visible }: { slug: string; visible: boolean }) => {
+      const { error } = await supabase
+        .from("page_visibility" as any)
+        .update({ visible })
+        .eq("slug", slug);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Updated");
+      qc.invalidateQueries({ queryKey: contentKeys.pageVisibility });
+    },
+    onError: (e: any) => toast.error(e.message),
+  });
+  if (isLoading) return <Loader2 className="animate-spin" />;
+  return (
+    <Card className="p-6">
+      <h2 className="font-display text-2xl">Page Visibility</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Toggle whether a page is reachable on the public site. Hidden pages are removed
+        from the header / footer navigation, and direct visits redirect to Home.
+      </p>
+      <div className="mt-6 space-y-2">
+        {(data ?? []).map((row: any) => (
+          <div key={row.slug} className="flex items-center justify-between rounded-lg border p-3 text-sm">
+            <div>
+              <div className="font-medium">{row.label}</div>
+              <div className="text-xs text-muted-foreground">/{row.slug}</div>
+            </div>
+            <label className="inline-flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">{row.visible ? "Visible" : "Hidden"}</span>
+              <input
+                type="checkbox"
+                className="size-5 accent-[var(--bronze)]"
+                checked={Boolean(row.visible)}
+                onChange={(e) => toggle.mutate({ slug: row.slug, visible: e.target.checked })}
+              />
+            </label>
+          </div>
+        ))}
+        {(data ?? []).length === 0 && (
+          <p className="text-sm text-muted-foreground">
+            No pages found. Seed the <code>page_visibility</code> table to enable this control.
+          </p>
+        )}
+      </div>
+    </Card>
+  );
+}
