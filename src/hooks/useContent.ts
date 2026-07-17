@@ -15,6 +15,7 @@ export const contentKeys = {
   socialLinks: ["social_links"] as const,
   footerLinks: ["footer_links"] as const,
   appointments: ["appointments"] as const,
+  pageVisibility: ["page_visibility"] as const,
 };
 
 function singleton<T>(table: "site_settings" | "hero_content" | "about_content" | "footer_content", key: readonly string[]) {
@@ -56,3 +57,34 @@ export const useTestimonials = list<any>("testimonials", contentKeys.testimonial
 export const useFaqs = list<any>("faqs", contentKeys.faqs);
 export const useSocialLinks = list<any>("social_links", contentKeys.socialLinks);
 export const useFooterLinks = list<any>("footer_links", contentKeys.footerLinks);
+
+/* ---------- Page visibility ---------- */
+export type PageVisibilityRow = { slug: string; label: string; visible: boolean; display_order: number };
+
+export function usePageVisibility() {
+  return useQuery({
+    queryKey: contentKeys.pageVisibility,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("page_visibility" as any)
+        .select("*")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as PageVisibilityRow[];
+    },
+  });
+}
+
+/** Extracts a page slug from a nav href like "/treatments" or "/treatments#foo". */
+export function slugFromHref(href: string | null | undefined): string | null {
+  if (!href) return null;
+  const clean = href.split("#")[0].split("?")[0].replace(/^\/+|\/+$/g, "");
+  if (!clean) return null;
+  return clean.toLowerCase();
+}
+
+export function isPageVisible(rows: PageVisibilityRow[] | undefined, slug: string): boolean {
+  if (!rows) return true; // don't hide while loading
+  const row = rows.find((r) => r.slug === slug);
+  return row ? row.visible : true;
+}
