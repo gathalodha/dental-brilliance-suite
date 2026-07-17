@@ -12,7 +12,7 @@ export const Route = createFileRoute("/testimonials")({
       { property: "og:description", content: "Real words from real patients." },
     ],
   }),
-  component: TestimonialsPage,
+  component: () => (<PageGate slug="testimonials"><TestimonialsPage /></PageGate>),
 });
 
 function TestimonialsPage() {

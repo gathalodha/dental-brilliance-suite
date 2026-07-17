@@ -12,7 +12,7 @@ export const Route = createFileRoute("/doctors")({
       { property: "og:description", content: "Meet the specialists behind Maison Dentaire." },
     ],
   }),
-  component: DoctorsPage,
+  component: () => (<PageGate slug="doctors"><DoctorsPage /></PageGate>),
 });
 
 function initialsOf(name: string) {

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/faqs")({
       { property: "og:description", content: "Common questions about visits, treatments, and financing." },
     ],
   }),
-  component: FaqPage,
+  component: () => (<PageGate slug="faqs"><FaqPage /></PageGate>),
 });
 
 function FaqPage() {

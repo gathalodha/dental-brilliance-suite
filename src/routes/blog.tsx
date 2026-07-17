@@ -11,7 +11,7 @@ export const Route = createFileRoute("/blog")({
       { property: "og:description", content: "Notes on modern dentistry from our studio." },
     ],
   }),
-  component: BlogPage,
+  component: () => (<PageGate slug="blog"><BlogPage /></PageGate>),
 });
 
 const featured = {

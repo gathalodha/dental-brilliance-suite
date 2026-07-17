@@ -11,7 +11,7 @@ export const Route = createFileRoute("/about")({
       { property: "og:description", content: "Where clinical excellence meets calm, considered design." },
     ],
   }),
-  component: AboutPage,
+  component: () => (<PageGate slug="about"><AboutPage /></PageGate>),
 });
 
 const values = [

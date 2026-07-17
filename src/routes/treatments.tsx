@@ -12,7 +12,7 @@ export const Route = createFileRoute("/treatments")({
       { property: "og:description", content: "Cosmetic, restorative, preventive and specialty dental treatments in a calm, boutique setting." },
     ],
   }),
-  component: TreatmentsPage,
+  component: () => (<PageGate slug="treatments"><TreatmentsPage /></PageGate>),
 });
 
 function TreatmentsPage() {

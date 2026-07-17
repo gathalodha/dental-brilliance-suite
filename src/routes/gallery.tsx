@@ -14,7 +14,7 @@ export const Route = createFileRoute("/gallery")({
       { property: "og:description", content: "The studio, the craft, and the smiles." },
     ],
   }),
-  component: GalleryPage,
+  component: () => (<PageGate slug="gallery"><GalleryPage /></PageGate>),
 });
 
 function GalleryPage() {
