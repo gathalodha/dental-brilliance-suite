@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, GraduationCap, Loader2 } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";

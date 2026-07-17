@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
 import { Award, HeartHandshake, Sparkles, ShieldCheck, Leaf, Users } from "lucide-react";
