@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/site/Reveal";
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/gallery")({
       { property: "og:description", content: "The studio, the craft, and the smiles." },
     ],
   }),
-  component: GalleryPage,
+  component: () => (<PageGate slug="gallery"><GalleryPage /></PageGate>),
 });
 
 function GalleryPage() {

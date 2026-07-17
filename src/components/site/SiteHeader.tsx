@@ -2,13 +2,20 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useNavigation, useSiteSettings } from "@/hooks/useContent";
+import { useNavigation, useSiteSettings, usePageVisibility, slugFromHref, isPageVisible } from "@/hooks/useContent";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { data: nav } = useNavigation();
+  const { data: pageVis } = usePageVisibility();
   const { data: settings } = useSiteSettings();
+
+  const visibleNav = (nav ?? []).filter((n: any) => {
+    const slug = slugFromHref(n.href);
+    if (!slug) return true;
+    return isPageVisible(pageVis, slug);
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -41,7 +48,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
-          {(nav ?? []).map((n: any) => (
+          {visibleNav.map((n: any) => (
             <a
               key={n.id}
               href={n.href}
@@ -80,7 +87,7 @@ export function SiteHeader() {
         <div className="lg:hidden">
           <div className="container-px mx-auto max-w-7xl border-t border-border/60 py-4">
             <div className="flex flex-col gap-1">
-              {(nav ?? []).map((n: any) => (
+              {visibleNav.map((n: any) => (
                 <a
                   key={n.id}
                   href={n.href}

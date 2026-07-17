@@ -21,6 +21,7 @@ type Section =
   | "Bookings"
   | "Hero"
   | "About"
+  | "Contact"
   | "Site Settings"
   | "Footer"
   | "Navigation"
@@ -29,6 +30,7 @@ type Section =
   | "Gallery"
   | "Testimonials"
   | "FAQs"
+  | "Page Visibility"
   | "Social Links"
   | "Footer Links"
   | "Media Library"
@@ -54,12 +56,14 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Gallery", section: "Gallery" },
       { label: "Testimonials", section: "Testimonials" },
       { label: "FAQs", section: "FAQs" },
+      { label: "Contact", section: "Contact" },
+      { label: "Page Visibility", section: "Page Visibility" },
     ],
   },
   {
     label: "Shared Website Content",
     items: [
-      { label: "Site Settings & SEO", section: "Site Settings" },
+      { label: "Global Settings & Contact", section: "Site Settings" },
       { label: "Navigation Menu", section: "Navigation" },
       { label: "Footer Content", section: "Footer" },
       { label: "Footer Links", section: "Footer Links" },
@@ -163,7 +167,7 @@ function AdminPage() {
             <SingletonEditor
               table="site_settings"
               queryKey={contentKeys.settings}
-              title="Site Settings"
+              title="Global Settings & Contact"
               fields={[
                 { key: "clinic_name", label: "Clinic name" },
                 { key: "brand_line", label: "Brand line" },
@@ -171,11 +175,10 @@ function AdminPage() {
                 { key: "favicon_url", label: "Favicon URL", type: "url" },
                 { key: "primary_color", label: "Primary brand color" },
                 { key: "secondary_color", label: "Secondary brand color" },
-                { key: "phone", label: "Phone" },
-                { key: "email", label: "Email" },
-                { key: "address", label: "Address", type: "textarea" },
-                { key: "google_maps_link", label: "Google Maps link", type: "url" },
-                { key: "google_maps_embed", label: "Google Maps embed URL", type: "url" },
+                { key: "phone", label: "Phone (shown site-wide)" },
+                { key: "emergency_phone", label: "Emergency phone" },
+                { key: "email", label: "Email (shown site-wide)" },
+                { key: "address", label: "Address (shown site-wide)", type: "textarea" },
                 { key: "whatsapp_number", label: "WhatsApp number (e.g. +15551234567)" },
                 { key: "whatsapp_message", label: "Default WhatsApp message", type: "textarea" },
                 { key: "call_button_link", label: "Call button link (tel:…)", type: "url" },
@@ -190,6 +193,17 @@ function AdminPage() {
               ]}
             />
           )}
+          {section === "Contact" && (
+            <SingletonEditor
+              table="site_settings"
+              queryKey={contentKeys.settings}
+              title="Contact Page — Map"
+              fields={[
+                { key: "google_maps_link", label: "Google Maps link (opens map in a new tab)", placeholder: "https://maps.google.com/…", type: "url" },
+                { key: "google_maps_embed", label: "Google Maps embed URL (paste the src=\"…\" URL from the Share → Embed a map dialog)", placeholder: "https://www.google.com/maps/embed?pb=…", type: "url" },
+              ]}
+            />
+          )}
           {section === "Footer" && (
             <SingletonEditor
               table="footer_content"
@@ -197,10 +211,6 @@ function AdminPage() {
               title="Footer Content"
               fields={[
                 { key: "description", label: "Footer description", type: "textarea" },
-                { key: "address", label: "Address", type: "textarea" },
-                { key: "phone", label: "Phone" },
-                { key: "email", label: "Email" },
-                { key: "google_maps_link", label: "Google Maps link", type: "url" },
                 { key: "hours_mon_thu", label: "Hours Mon–Thu" },
                 { key: "hours_fri", label: "Hours Fri" },
                 { key: "hours_sat", label: "Hours Sat" },
@@ -311,6 +321,7 @@ function AdminPage() {
               ]}
             />
           )}
+          {section === "Page Visibility" && <PageVisibilityEditor />}
           {section === "Media Library" && <MediaLibrary />}
           {section === "Admins" && <Admins />}
         </div>
@@ -335,9 +346,8 @@ const treatmentFields: FieldDef[] = [
 
 const doctorFields: FieldDef[] = [
   { key: "name", label: "Name" },
-  { key: "role_label", label: "Role label (shown on card)" },
+  { key: "role_label", label: "Role / specialization (shown on card)" },
   { key: "qualification", label: "Qualification" },
-  { key: "specialization", label: "Specialization" },
   { key: "experience", label: "Experience" },
   { key: "bio", label: "Bio", type: "textarea" },
   { key: "focus", label: "Focus areas", type: "array", placeholder: "Veneers, Smile Design" },
@@ -481,6 +491,69 @@ VALUES ('new-admin@example.com');`}
         {(data ?? []).map((r: any) => (
           <div key={r.email} className="rounded border p-3 text-sm">{r.email}</div>
         ))}
+      </div>
+    </Card>
+  );
+}
+
+function PageVisibilityEditor() {
+  const qc = useQueryClient();
+  const { data, isLoading } = useQuery({
+    queryKey: contentKeys.pageVisibility,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("page_visibility" as any)
+        .select("*")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
+  const toggle = useMutation({
+    mutationFn: async ({ slug, visible }: { slug: string; visible: boolean }) => {
+      const { error } = await supabase
+        .from("page_visibility" as any)
+        .update({ visible })
+        .eq("slug", slug);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Updated");
+      qc.invalidateQueries({ queryKey: contentKeys.pageVisibility });
+    },
+    onError: (e: any) => toast.error(e.message),
+  });
+  if (isLoading) return <Loader2 className="animate-spin" />;
+  return (
+    <Card className="p-6">
+      <h2 className="font-display text-2xl">Page Visibility</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Toggle whether a page is reachable on the public site. Hidden pages are removed
+        from the header / footer navigation, and direct visits redirect to Home.
+      </p>
+      <div className="mt-6 space-y-2">
+        {(data ?? []).map((row: any) => (
+          <div key={row.slug} className="flex items-center justify-between rounded-lg border p-3 text-sm">
+            <div>
+              <div className="font-medium">{row.label}</div>
+              <div className="text-xs text-muted-foreground">/{row.slug}</div>
+            </div>
+            <label className="inline-flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">{row.visible ? "Visible" : "Hidden"}</span>
+              <input
+                type="checkbox"
+                className="size-5 accent-[var(--bronze)]"
+                checked={Boolean(row.visible)}
+                onChange={(e) => toggle.mutate({ slug: row.slug, visible: e.target.checked })}
+              />
+            </label>
+          </div>
+        ))}
+        {(data ?? []).length === 0 && (
+          <p className="text-sm text-muted-foreground">
+            No pages found. Seed the <code>page_visibility</code> table to enable this control.
+          </p>
+        )}
       </div>
     </Card>
   );

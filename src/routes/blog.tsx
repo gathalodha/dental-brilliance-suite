@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
 import { Quote, Star } from "lucide-react";
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/blog")({
       { property: "og:description", content: "Notes on modern dentistry from our studio." },
     ],
   }),
-  component: BlogPage,
+  component: () => (<PageGate slug="blog"><BlogPage /></PageGate>),
 });
 
 const featured = {

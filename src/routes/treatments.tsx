@@ -1,3 +1,4 @@
+import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Loader2 } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/treatments")({
       { property: "og:description", content: "Cosmetic, restorative, preventive and specialty dental treatments in a calm, boutique setting." },
     ],
   }),
-  component: TreatmentsPage,
+  component: () => (<PageGate slug="treatments"><TreatmentsPage /></PageGate>),
 });
 
 function TreatmentsPage() {
