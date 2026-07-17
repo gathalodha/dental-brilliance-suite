@@ -48,7 +48,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
-          {(nav ?? []).map((n: any) => (
+          {visibleNav.map((n: any) => (
             <a
               key={n.id}
               href={n.href}
@@ -87,7 +87,7 @@ export function SiteHeader() {
         <div className="lg:hidden">
           <div className="container-px mx-auto max-w-7xl border-t border-border/60 py-4">
             <div className="flex flex-col gap-1">
-              {(nav ?? []).map((n: any) => (
+              {visibleNav.map((n: any) => (
                 <a
                   key={n.id}
                   href={n.href}
