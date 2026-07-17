@@ -167,7 +167,7 @@ function AdminPage() {
             <SingletonEditor
               table="site_settings"
               queryKey={contentKeys.settings}
-              title="Site Settings"
+              title="Global Settings & Contact"
               fields={[
                 { key: "clinic_name", label: "Clinic name" },
                 { key: "brand_line", label: "Brand line" },
@@ -175,11 +175,10 @@ function AdminPage() {
                 { key: "favicon_url", label: "Favicon URL", type: "url" },
                 { key: "primary_color", label: "Primary brand color" },
                 { key: "secondary_color", label: "Secondary brand color" },
-                { key: "phone", label: "Phone" },
-                { key: "email", label: "Email" },
-                { key: "address", label: "Address", type: "textarea" },
-                { key: "google_maps_link", label: "Google Maps link", type: "url" },
-                { key: "google_maps_embed", label: "Google Maps embed URL", type: "url" },
+                { key: "phone", label: "Phone (shown site-wide)" },
+                { key: "emergency_phone", label: "Emergency phone" },
+                { key: "email", label: "Email (shown site-wide)" },
+                { key: "address", label: "Address (shown site-wide)", type: "textarea" },
                 { key: "whatsapp_number", label: "WhatsApp number (e.g. +15551234567)" },
                 { key: "whatsapp_message", label: "Default WhatsApp message", type: "textarea" },
                 { key: "call_button_link", label: "Call button link (tel:…)", type: "url" },
@@ -194,6 +193,17 @@ function AdminPage() {
               ]}
             />
           )}
+          {section === "Contact" && (
+            <SingletonEditor
+              table="site_settings"
+              queryKey={contentKeys.settings}
+              title="Contact Page — Map"
+              fields={[
+                { key: "google_maps_link", label: "Google Maps link (opens map in a new tab)", placeholder: "https://maps.google.com/…", type: "url" },
+                { key: "google_maps_embed", label: "Google Maps embed URL (paste the src=\"…\" URL from the Share → Embed a map dialog)", placeholder: "https://www.google.com/maps/embed?pb=…", type: "url" },
+              ]}
+            />
+          )}
           {section === "Footer" && (
             <SingletonEditor
               table="footer_content"
@@ -201,10 +211,6 @@ function AdminPage() {
               title="Footer Content"
               fields={[
                 { key: "description", label: "Footer description", type: "textarea" },
-                { key: "address", label: "Address", type: "textarea" },
-                { key: "phone", label: "Phone" },
-                { key: "email", label: "Email" },
-                { key: "google_maps_link", label: "Google Maps link", type: "url" },
                 { key: "hours_mon_thu", label: "Hours Mon–Thu" },
                 { key: "hours_fri", label: "Hours Fri" },
                 { key: "hours_sat", label: "Hours Sat" },
