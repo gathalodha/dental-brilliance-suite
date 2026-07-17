@@ -1,5 +1,5 @@
 import { Instagram, Facebook, Twitter, Youtube, Linkedin, Send, MessageCircle, MapPin, Phone, Mail } from "lucide-react";
-import { useFooterContent, useFooterLinks, useSocialLinks, useSiteSettings } from "@/hooks/useContent";
+import { useFooterContent, useFooterLinks, useSocialLinks, useSiteSettings, usePageVisibility, slugFromHref, isPageVisible } from "@/hooks/useContent";
 
 const SOCIAL_ICONS: Record<string, typeof Instagram> = {
   instagram: Instagram,
@@ -17,9 +17,19 @@ export function SiteFooter() {
   const { data: links } = useFooterLinks();
   const { data: socials } = useSocialLinks();
   const { data: settings } = useSiteSettings();
+  const { data: pageVis } = usePageVisibility();
 
   const clinicName = settings?.clinic_name ?? "Maison Dentaire";
   const logo = settings?.logo_url as string | null | undefined;
+  const address = settings?.address ?? "";
+  const phone = settings?.phone ?? "";
+  const email = settings?.email ?? "";
+
+  const visibleLinks = (links ?? []).filter((l: any) => {
+    const slug = slugFromHref(l.href);
+    if (!slug) return true;
+    return isPageVisible(pageVis, slug);
+  });
 
   return (
     <footer className="mt-24 border-t border-border/60 bg-[color-mix(in_oklab,var(--cocoa)_96%,var(--bronze))] text-ivory">
@@ -44,7 +54,7 @@ export function SiteFooter() {
           <div>
             <h4 className="text-sm uppercase tracking-[0.2em] text-ivory/60">Explore</h4>
             <ul className="mt-5 space-y-3 text-sm">
-              {(links ?? []).map((l: any) => (
+              {visibleLinks.map((l: any) => (
                 <li key={l.id}><a href={l.href} className="hover:text-[var(--bronze-soft)]">{l.label}</a></li>
               ))}
             </ul>
@@ -53,11 +63,12 @@ export function SiteFooter() {
           <div>
             <h4 className="text-sm uppercase tracking-[0.2em] text-ivory/60">Visit</h4>
             <ul className="mt-5 space-y-3 text-sm text-ivory/80">
-              {footer?.address && <li className="flex gap-2"><MapPin className="mt-0.5 size-4 shrink-0" /> {footer.address}</li>}
-              {footer?.phone && <li className="flex gap-2"><Phone className="mt-0.5 size-4 shrink-0" /> {footer.phone}</li>}
-              {footer?.email && <li className="flex gap-2"><Mail className="mt-0.5 size-4 shrink-0" /> {footer.email}</li>}
+              {address && <li className="flex gap-2"><MapPin className="mt-0.5 size-4 shrink-0" /> {address}</li>}
+              {phone && <li className="flex gap-2"><Phone className="mt-0.5 size-4 shrink-0" /> <a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-[var(--bronze-soft)]">{phone}</a></li>}
+              {email && <li className="flex gap-2"><Mail className="mt-0.5 size-4 shrink-0" /> <a href={`mailto:${email}`} className="hover:text-[var(--bronze-soft)]">{email}</a></li>}
             </ul>
           </div>
+
 
           <div>
             <h4 className="text-sm uppercase tracking-[0.2em] text-ivory/60">Hours</h4>
