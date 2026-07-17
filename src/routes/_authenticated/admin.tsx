@@ -21,6 +21,7 @@ type Section =
   | "Bookings"
   | "Hero"
   | "About"
+  | "Contact"
   | "Site Settings"
   | "Footer"
   | "Navigation"
@@ -29,6 +30,7 @@ type Section =
   | "Gallery"
   | "Testimonials"
   | "FAQs"
+  | "Page Visibility"
   | "Social Links"
   | "Footer Links"
   | "Media Library"
@@ -54,12 +56,14 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Gallery", section: "Gallery" },
       { label: "Testimonials", section: "Testimonials" },
       { label: "FAQs", section: "FAQs" },
+      { label: "Contact", section: "Contact" },
+      { label: "Page Visibility", section: "Page Visibility" },
     ],
   },
   {
     label: "Shared Website Content",
     items: [
-      { label: "Site Settings & SEO", section: "Site Settings" },
+      { label: "Global Settings & Contact", section: "Site Settings" },
       { label: "Navigation Menu", section: "Navigation" },
       { label: "Footer Content", section: "Footer" },
       { label: "Footer Links", section: "Footer Links" },
