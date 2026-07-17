@@ -161,9 +161,25 @@ function ContactPage() {
               <div className="rounded-[2rem] border border-border/60 bg-card p-8">
                 <h3 className="text-xl">Visit us</h3>
                 <ul className="mt-5 space-y-4 text-sm">
-                  <li className="flex gap-3"><MapPin className="mt-0.5 size-4 shrink-0 text-accent" /><span>24 Bronzewood Lane, Suite 5<br />San Francisco, CA 94110</span></li>
-                  <li className="flex gap-3"><Phone className="mt-0.5 size-4 shrink-0 text-accent" /><a href="tel:+15551234567" className="hover:text-accent">(555) 123-4567</a></li>
-                  <li className="flex gap-3"><Mail className="mt-0.5 size-4 shrink-0 text-accent" /><a href="mailto:hello@maisondentaire.com" className="hover:text-accent">hello@maisondentaire.com</a></li>
+                  {address && (
+                    <li className="flex gap-3">
+                      <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
+                      {mapLink ? (
+                        <a href={mapLink} target="_blank" rel="noreferrer" className="whitespace-pre-line hover:text-accent">{address}</a>
+                      ) : (
+                        <span className="whitespace-pre-line">{address}</span>
+                      )}
+                    </li>
+                  )}
+                  {phone && (
+                    <li className="flex gap-3"><Phone className="mt-0.5 size-4 shrink-0 text-accent" /><a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-accent">{phone}</a></li>
+                  )}
+                  {emergency && (
+                    <li className="flex gap-3"><Phone className="mt-0.5 size-4 shrink-0 text-destructive" /><a href={`tel:${emergency.replace(/\s/g, "")}`} className="hover:text-accent">{emergency} <span className="text-xs text-muted-foreground">(emergency)</span></a></li>
+                  )}
+                  {email && (
+                    <li className="flex gap-3"><Mail className="mt-0.5 size-4 shrink-0 text-accent" /><a href={`mailto:${email}`} className="hover:text-accent">{email}</a></li>
+                  )}
                 </ul>
               </div>
 
@@ -177,16 +193,21 @@ function ContactPage() {
                 </ul>
               </div>
 
-              <div className="overflow-hidden rounded-[2rem] border border-border/60 bg-card">
-                <div className="aspect-[4/3] w-full bg-secondary">
-                  <iframe
-                    title="Clinic location"
-                    src="https://www.openstreetmap.org/export/embed.html?bbox=-122.42%2C37.75%2C-122.40%2C37.77&layer=mapnik"
-                    className="size-full"
-                    loading="lazy"
-                  />
+              {mapEmbed && (
+                <div className="overflow-hidden rounded-[2rem] border border-border/60 bg-card">
+                  <div className="aspect-[4/3] w-full bg-secondary">
+                    <iframe
+                      title="Clinic location"
+                      src={mapEmbed}
+                      className="size-full"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
+
             </div>
           </Reveal>
         </div>
