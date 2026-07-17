@@ -321,6 +321,7 @@ function AdminPage() {
               ]}
             />
           )}
+          {section === "Page Visibility" && <PageVisibilityEditor />}
           {section === "Media Library" && <MediaLibrary />}
           {section === "Admins" && <Admins />}
         </div>
@@ -345,9 +346,8 @@ const treatmentFields: FieldDef[] = [
 
 const doctorFields: FieldDef[] = [
   { key: "name", label: "Name" },
-  { key: "role_label", label: "Role label (shown on card)" },
+  { key: "role_label", label: "Role / specialization (shown on card)" },
   { key: "qualification", label: "Qualification" },
-  { key: "specialization", label: "Specialization" },
   { key: "experience", label: "Experience" },
   { key: "bio", label: "Bio", type: "textarea" },
   { key: "focus", label: "Focus areas", type: "array", placeholder: "Veneers, Smile Design" },
