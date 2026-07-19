@@ -166,12 +166,12 @@ function HomePage() {
       <section className="container-px mx-auto max-w-7xl py-24 md:py-32">
         <div className="grid gap-16 md:grid-cols-2 md:items-center">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.35em] text-accent">The Maison</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-accent">Our Commitment to Excellence</p>
             <h2 className="mt-4 text-balance text-4xl leading-tight md:text-5xl">
               Dentistry, reimagined as a <em className="italic text-accent">quiet ritual.</em>
             </h2>
             <p className="mt-6 max-w-md text-muted-foreground">
-              Founded in 2007, Maison Dentaire is a small, independent practice built
+              Founded in 2007, Our Clininc is a small, independent practice built
               around a simple belief: exceptional care should feel like a moment for yourself.
               Our team of specialists works together on every plan — nothing is outsourced.
             </p>
