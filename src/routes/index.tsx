@@ -237,7 +237,7 @@ function HomePage() {
       <section className="container-px mx-auto max-w-7xl py-24 md:py-32">
         <div className="grid gap-14 md:grid-cols-[1fr_1.2fr]">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.35em] text-accent">Why Maison</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-accent">Why Us</p>
             <h2 className="mt-4 text-balance text-4xl md:text-5xl">
               Four things you'll <em className="italic text-accent">notice</em> first.
             </h2>
