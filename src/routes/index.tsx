@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
 import heroImage from "@/assets/hero-clinic.jpg";
 import { Reveal } from "@/components/site/Reveal";
-import { useHeroContent, useAboutContent, useTreatments, useTestimonials } from "@/hooks/useContent";
+import { useHeroContent, useAboutContent, useTreatments, useTestimonials, useSiteSettings } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,6 +29,12 @@ function HomePage() {
   const { data: about } = useAboutContent();
   const { data: treatments } = useTreatments();
   const { data: testimonials } = useTestimonials();
+  const { data: settings } = useSiteSettings();
+
+  const phone = settings?.phone ?? "";
+  const emergencyPhone = settings?.emergency_phone ?? "";
+  const telHref = settings?.call_button_link || (phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : "/contact");
+
 
   const brandLine = hero?.brand_line ?? "Boutique Dental Practice";
   const heading = hero?.heading ?? "A quieter kind of dentistry.";
@@ -109,7 +115,7 @@ function HomePage() {
             >
               <span className="flex items-center gap-2"><Award className="size-4 text-accent" /> Board-certified specialists</span>
               <span className="flex items-center gap-2"><Clock className="size-4 text-accent" /> Same-week appointments</span>
-              <span className="flex items-center gap-2"><Phone className="size-4 text-accent" /> 24/7 emergency line</span>
+              <span className="flex items-center gap-2"><Phone className="size-4 text-accent" /> {emergencyPhone ? `Emergency line ${emergencyPhone}` : "24/7 emergency line"}</span>
             </motion.div>
           </div>
 
@@ -312,12 +318,15 @@ function HomePage() {
                 >
                   Book a consultation <ArrowRight className="size-4" />
                 </Link>
-                <a
-                  href="tel:+15551234567"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-4 text-sm font-medium hover:bg-secondary"
-                >
-                  <Phone className="size-4" /> (555) 123-4567
-                </a>
+                {phone && (
+                  <a
+                    href={telHref}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-4 text-sm font-medium hover:bg-secondary"
+                  >
+                    <Phone className="size-4" /> {phone}
+                  </a>
+                )}
+
               </div>
             </div>
             <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-accent/20 blur-3xl" />

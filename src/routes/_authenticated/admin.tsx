@@ -9,7 +9,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { listMedia, deleteMedia, uploadMedia } from "@/lib/media";
 import { toast } from "sonner";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LogOut, ExternalLink, Loader2, Trash2, Upload, Copy, Menu, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -64,7 +64,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Shared Website Content",
     items: [
-      { label: "Global Settings & Contact", section: "Site Settings" },
+      { label: "Global Settings", section: "Site Settings" },
       { label: "Navigation Menu", section: "Navigation" },
       { label: "Footer Content", section: "Footer" },
       { label: "Footer Links", section: "Footer Links" },
@@ -144,9 +144,11 @@ function AdminPage() {
           <SheetContent side="left" className="w-[85vw] max-w-sm overflow-y-auto p-6">
             <SheetHeader className="p-0 pb-4 text-left">
               <SheetTitle className="font-display text-lg">Sections</SheetTitle>
+              <SheetDescription className="text-xs">Pick the part of the site you want to edit.</SheetDescription>
             </SheetHeader>
             {navList}
           </SheetContent>
+
         </Sheet>
       </div>
 
@@ -198,29 +200,42 @@ function AdminPage() {
             <SingletonEditor
               table="site_settings"
               queryKey={contentKeys.settings}
-              title="Global Settings & Contact"
-              fields={[
-                { key: "clinic_name", label: "Clinic name" },
-                { key: "brand_line", label: "Brand line" },
-                { key: "logo_url", label: "Logo", type: "image" },
-                { key: "favicon_url", label: "Favicon URL", type: "url" },
-                { key: "primary_color", label: "Primary brand color" },
-                { key: "secondary_color", label: "Secondary brand color" },
-                { key: "phone", label: "Phone (shown site-wide)" },
-                { key: "emergency_phone", label: "Emergency phone" },
-                { key: "email", label: "Email (shown site-wide)" },
-                { key: "address", label: "Address (shown site-wide)", type: "textarea" },
-                { key: "whatsapp_number", label: "WhatsApp number (e.g. +15551234567)" },
-                { key: "whatsapp_message", label: "Default WhatsApp message", type: "textarea" },
-                { key: "call_button_link", label: "Call button link (tel:…)", type: "url" },
-                { key: "telegram_link", label: "Telegram link", type: "url" },
-                { key: "show_whatsapp", label: "Show WhatsApp floating button", type: "boolean" },
-                { key: "show_call", label: "Show call floating button", type: "boolean" },
-                { key: "show_telegram", label: "Show Telegram floating button", type: "boolean" },
-                { key: "meta_title", label: "Default SEO title" },
-                { key: "meta_description", label: "Default SEO description", type: "textarea" },
-                { key: "meta_keywords", label: "SEO keywords" },
-                { key: "og_image_url", label: "Open Graph image", type: "image" },
+              title="Global Settings"
+              description="Brand identity, floating buttons and SEO defaults. Phone, email, address and map live under Pages → Contact."
+              groups={[
+                {
+                  label: "Brand",
+                  fields: [
+                    { key: "clinic_name", label: "Clinic name" },
+                    { key: "brand_line", label: "Brand line" },
+                    { key: "logo_url", label: "Logo", type: "image" },
+                    { key: "favicon_url", label: "Favicon URL", type: "url" },
+                    { key: "primary_color", label: "Primary brand color" },
+                    { key: "secondary_color", label: "Secondary brand color" },
+                  ],
+                },
+                {
+                  label: "Floating buttons",
+                  description: "The round buttons shown at the bottom-right of every page.",
+                  fields: [
+                    { key: "show_call", label: "Show call button", type: "boolean" },
+                    { key: "call_button_link", label: "Call button link (tel:…) — leave empty to use the contact phone", type: "url" },
+                    { key: "show_whatsapp", label: "Show WhatsApp button", type: "boolean" },
+                    { key: "whatsapp_number", label: "WhatsApp number (e.g. +15551234567)" },
+                    { key: "whatsapp_message", label: "Default WhatsApp message", type: "textarea" },
+                    { key: "show_telegram", label: "Show Telegram button", type: "boolean" },
+                    { key: "telegram_link", label: "Telegram link", type: "url" },
+                  ],
+                },
+                {
+                  label: "SEO defaults",
+                  fields: [
+                    { key: "meta_title", label: "Default SEO title" },
+                    { key: "meta_description", label: "Default SEO description", type: "textarea" },
+                    { key: "meta_keywords", label: "SEO keywords" },
+                    { key: "og_image_url", label: "Social share image", type: "image" },
+                  ],
+                },
               ]}
             />
           )}
@@ -228,13 +243,29 @@ function AdminPage() {
             <SingletonEditor
               table="site_settings"
               queryKey={contentKeys.settings}
-              title="Contact Page — Map"
-              fields={[
-                { key: "google_maps_link", label: "Google Maps link (opens map in a new tab)", placeholder: "https://maps.google.com/…", type: "url" },
-                { key: "google_maps_embed", label: "Google Maps embed URL (paste the src=\"…\" URL from the Share → Embed a map dialog)", placeholder: "https://www.google.com/maps/embed?pb=…", type: "url" },
+              title="Contact"
+              description="These details appear on the contact page, header, footer and home page."
+              groups={[
+                {
+                  label: "Contact details",
+                  fields: [
+                    { key: "phone", label: "Phone (shown site-wide)" },
+                    { key: "emergency_phone", label: "Emergency phone" },
+                    { key: "email", label: "Email (shown site-wide)" },
+                    { key: "address", label: "Address (shown site-wide)", type: "textarea" },
+                  ],
+                },
+                {
+                  label: "Map",
+                  fields: [
+                    { key: "google_maps_link", label: "Google Maps link (opens map in a new tab)", placeholder: "https://maps.google.com/…", type: "url" },
+                    { key: "google_maps_embed", label: "Google Maps embed URL (the src=\"…\" URL from Share → Embed a map)", placeholder: "https://www.google.com/maps/embed?pb=…", type: "url" },
+                  ],
+                },
               ]}
             />
           )}
+
           {section === "Footer" && (
             <SingletonEditor
               table="footer_content"
