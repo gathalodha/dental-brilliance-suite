@@ -9,7 +9,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { listMedia, deleteMedia, uploadMedia } from "@/lib/media";
 import { toast } from "sonner";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LogOut, ExternalLink, Loader2, Trash2, Upload, Copy, Menu, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
