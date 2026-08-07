@@ -20,17 +20,23 @@ export type FieldDef = {
   placeholder?: string;
 };
 
+export type FieldGroup = { label: string; description?: string; fields: FieldDef[] };
+
 /* ---------- Singleton editor (one-row tables) ---------- */
 export function SingletonEditor({
   table,
   queryKey,
   fields,
+  groups,
   title,
+  description,
 }: {
   table: string;
   queryKey: readonly string[];
-  fields: FieldDef[];
+  fields?: FieldDef[];
+  groups?: FieldGroup[];
   title: string;
+  description?: string;
 }) {
   const qc = useQueryClient();
   const { data, isLoading } = useQuery({
@@ -40,11 +46,14 @@ export function SingletonEditor({
       if (error) throw error;
       return data as Record<string, any> | null;
     },
+    staleTime: 30_000,
   });
   const [form, setForm] = useState<Record<string, any>>({});
   useEffect(() => {
     if (data) setForm(data);
   }, [data]);
+
+  const resolvedGroups: FieldGroup[] = groups ?? [{ label: "", fields: fields ?? [] }];
 
   const save = useMutation({
     mutationFn: async () => {
@@ -55,7 +64,6 @@ export function SingletonEditor({
     onSuccess: () => {
       toast.success("Saved");
       qc.invalidateQueries({ queryKey });
-      qc.invalidateQueries();
     },
     onError: (e: any) => toast.error(e.message),
   });
@@ -63,21 +71,37 @@ export function SingletonEditor({
   if (isLoading) return <Loader2 className="animate-spin" />;
 
   return (
-    <Card className="p-6">
+    <Card className="p-5 md:p-6">
       <h2 className="font-display text-2xl">{title}</h2>
-      <div className="mt-6 grid gap-5 md:grid-cols-2">
-        {fields.map((f) => (
-          <FieldInput key={f.key} field={f} value={form[f.key]} onChange={(v) => setForm({ ...form, [f.key]: v })} />
+      {description && <p className="mt-2 text-sm text-muted-foreground">{description}</p>}
+
+      <div className="mt-6 space-y-8">
+        {resolvedGroups.map((g, gi) => (
+          <div key={g.label || gi}>
+            {g.label && (
+              <div className="mb-4 border-b pb-2">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{g.label}</p>
+                {g.description && <p className="mt-1 text-xs text-muted-foreground">{g.description}</p>}
+              </div>
+            )}
+            <div className="grid gap-5 md:grid-cols-2">
+              {g.fields.map((f) => (
+                <FieldInput key={f.key} field={f} value={form[f.key]} onChange={(v) => setForm((p) => ({ ...p, [f.key]: v }))} />
+              ))}
+            </div>
+          </div>
         ))}
       </div>
-      <div className="mt-6 flex justify-end">
-        <Button onClick={() => save.mutate()} disabled={save.isPending}>
+
+      <div className="mt-8 flex justify-end">
+        <Button onClick={() => save.mutate()} disabled={save.isPending} className="w-full sm:w-auto">
           {save.isPending ? "Saving…" : "Save changes"}
         </Button>
       </div>
     </Card>
   );
 }
+
 
 /* ---------- List editor (many-row tables) ---------- */
 export function ListEditor({
