@@ -64,7 +64,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Shared Website Content",
     items: [
-      { label: "Global Settings & Contact", section: "Site Settings" },
+      { label: "Global Settings", section: "Site Settings" },
       { label: "Navigation Menu", section: "Navigation" },
       { label: "Footer Content", section: "Footer" },
       { label: "Footer Links", section: "Footer Links" },
