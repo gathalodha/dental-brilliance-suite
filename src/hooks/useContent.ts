@@ -27,6 +27,8 @@ function singleton<T>(table: "site_settings" | "hero_content" | "about_content" 
         if (error) throw error;
         return data as T | null;
       },
+      staleTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
     });
 }
 
@@ -46,8 +48,11 @@ function list<T>(table: string, key: readonly string[], visibleOnly = true) {
         if (error) throw error;
         return (data ?? []) as T[];
       },
+      staleTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
     });
 }
+
 
 export const useNavigation = list<any>("navigation_items", contentKeys.navigation);
 export const useTreatments = list<any>("treatments", contentKeys.treatments);
