@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
 import heroImage from "@/assets/hero-clinic.jpg";
 import { Reveal } from "@/components/site/Reveal";
-import { useHeroContent, useAboutContent, useTreatments, useTestimonials } from "@/hooks/useContent";
+import { useHeroContent, useAboutContent, useTreatments, useTestimonials, useSiteSettings } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/")({
   head: () => ({
