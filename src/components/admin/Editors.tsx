@@ -125,13 +125,14 @@ export function ListEditor({
       if (error) throw error;
       return (data ?? []) as Record<string, any>[];
     },
+    staleTime: 30_000,
   });
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: [...queryKey, "admin"] });
     qc.invalidateQueries({ queryKey });
-    qc.invalidateQueries();
   };
+
 
   const add = useMutation({
     mutationFn: async () => {
