@@ -144,9 +144,11 @@ function AdminPage() {
           <SheetContent side="left" className="w-[85vw] max-w-sm overflow-y-auto p-6">
             <SheetHeader className="p-0 pb-4 text-left">
               <SheetTitle className="font-display text-lg">Sections</SheetTitle>
+              <SheetDescription className="text-xs">Pick the part of the site you want to edit.</SheetDescription>
             </SheetHeader>
             {navList}
           </SheetContent>
+
         </Sheet>
       </div>
 
