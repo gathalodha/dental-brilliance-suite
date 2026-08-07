@@ -318,12 +318,15 @@ function HomePage() {
                 >
                   Book a consultation <ArrowRight className="size-4" />
                 </Link>
-                <a
-                  href="tel:+15551234567"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-4 text-sm font-medium hover:bg-secondary"
-                >
-                  <Phone className="size-4" /> (555) 123-4567
-                </a>
+                {phone && (
+                  <a
+                    href={telHref}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-7 py-4 text-sm font-medium hover:bg-secondary"
+                  >
+                    <Phone className="size-4" /> {phone}
+                  </a>
+                )}
+
               </div>
             </div>
             <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-accent/20 blur-3xl" />
