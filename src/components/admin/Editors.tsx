@@ -159,8 +159,11 @@ export function ListEditor({
     const swap = data[idx + dir];
     if (!swap) return;
     const a = data[idx];
-    await supabase.from(table as any).update({ display_order: swap.display_order }).eq("id", a.id);
-    await supabase.from(table as any).update({ display_order: a.display_order }).eq("id", swap.id);
+    await Promise.all([
+      supabase.from(table as any).update({ display_order: swap.display_order }).eq("id", a.id),
+      supabase.from(table as any).update({ display_order: a.display_order }).eq("id", swap.id),
+    ]);
+
     invalidate();
   };
 
