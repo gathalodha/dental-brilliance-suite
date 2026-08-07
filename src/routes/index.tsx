@@ -115,7 +115,7 @@ function HomePage() {
             >
               <span className="flex items-center gap-2"><Award className="size-4 text-accent" /> Board-certified specialists</span>
               <span className="flex items-center gap-2"><Clock className="size-4 text-accent" /> Same-week appointments</span>
-              <span className="flex items-center gap-2"><Phone className="size-4 text-accent" /> 24/7 emergency line</span>
+              <span className="flex items-center gap-2"><Phone className="size-4 text-accent" /> {emergencyPhone ? `Emergency line ${emergencyPhone}` : "24/7 emergency line"}</span>
             </motion.div>
           </div>
 
