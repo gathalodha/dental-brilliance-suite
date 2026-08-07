@@ -77,7 +77,10 @@ export function usePageVisibility() {
       if (error) throw error;
       return ((data ?? []) as unknown) as PageVisibilityRow[];
     },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
+
 }
 
 /** Extracts a page slug from a nav href like "/treatments" or "/treatments#foo". */
