@@ -82,48 +82,78 @@ const NAV_GROUPS: NavGroup[] = [
 function AdminPage() {
   const { user, signOut } = useAuth();
   const [section, setSection] = useState<Section>("Overview");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navList = (
+    <nav className="flex flex-col gap-5">
+      {NAV_GROUPS.map((group) => (
+        <div key={group.label} className="flex flex-col gap-1">
+          <p className="px-3 pb-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            {group.label}
+          </p>
+          {group.items.map((item) => (
+            <button
+              key={item.section}
+              onClick={() => {
+                setSection(item.section);
+                setMenuOpen(false);
+              }}
+              className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                section === item.section ? "bg-primary text-primary-foreground" : "hover:bg-secondary"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      ))}
+    </nav>
+  );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-accent">Admin</p>
-          <h1 className="font-display text-3xl">Content Management</h1>
+          <h1 className="font-display text-2xl md:text-3xl">Content Management</h1>
         </div>
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">{user?.email}</span>
+          <span className="hidden text-muted-foreground sm:inline">{user?.email}</span>
           <Button variant="outline" size="sm" asChild>
-            <Link to="/"><ExternalLink className="mr-2 size-4" /> View site</Link>
+            <Link to="/"><ExternalLink className="mr-2 size-4" /> <span className="hidden sm:inline">View site</span></Link>
           </Button>
           <Button variant="outline" size="sm" onClick={() => signOut()}>
-            <LogOut className="mr-2 size-4" /> Sign out
+            <LogOut className="mr-2 size-4" /> <span className="hidden sm:inline">Sign out</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[260px_1fr]">
-        <nav className="flex flex-col gap-5">
-          {NAV_GROUPS.map((group) => (
-            <div key={group.label} className="flex flex-col gap-1">
-              <p className="px-3 pb-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                {group.label}
-              </p>
-              {group.items.map((item) => (
-                <button
-                  key={item.section}
-                  onClick={() => setSection(item.section)}
-                  className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                    section === item.section ? "bg-primary text-primary-foreground" : "hover:bg-secondary"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          ))}
-        </nav>
+      {/* Mobile section switcher */}
+      <div className="mb-4 md:hidden">
+        <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full justify-between">
+              <span className="flex items-center gap-2">
+                <Menu className="size-4" />
+                {section}
+              </span>
+              <ChevronDown className="size-4 opacity-60" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[85vw] max-w-sm overflow-y-auto p-6">
+            <SheetHeader className="p-0 pb-4 text-left">
+              <SheetTitle className="font-display text-lg">Sections</SheetTitle>
+            </SheetHeader>
+            {navList}
+          </SheetContent>
+        </Sheet>
+      </div>
 
-        <div>
+      <div className="grid gap-6 md:grid-cols-[260px_1fr]">
+        <div className="hidden md:block">{navList}</div>
+
+        <div className="min-w-0">
+
           {section === "Overview" && <Overview />}
           {section === "Bookings" && <Bookings />}
           {section === "Hero" && (
