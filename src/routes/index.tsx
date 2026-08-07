@@ -29,6 +29,12 @@ function HomePage() {
   const { data: about } = useAboutContent();
   const { data: treatments } = useTreatments();
   const { data: testimonials } = useTestimonials();
+  const { data: settings } = useSiteSettings();
+
+  const phone = settings?.phone ?? "";
+  const emergencyPhone = settings?.emergency_phone ?? "";
+  const telHref = settings?.call_button_link || (phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : "/contact");
+
 
   const brandLine = hero?.brand_line ?? "Boutique Dental Practice";
   const heading = hero?.heading ?? "A quieter kind of dentistry.";
