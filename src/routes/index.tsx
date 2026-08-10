@@ -203,42 +203,77 @@ function HomePage() {
 
       {/* TREATMENTS */}
       <section className="bg-[color-mix(in_oklab,var(--ivory)_60%,var(--background))] py-24 md:py-32">
-        <div className="container-px mx-auto max-w-7xl">
-          <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div className="max-w-xl">
-                <p className="text-xs uppercase tracking-[0.35em] text-accent">Treatments</p>
-                <h2 className="mt-4 text-balance text-4xl md:text-5xl">A complete range of care.</h2>
+  <div className="container-px mx-auto max-w-7xl">
+    <Reveal>
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="max-w-xl">
+          <p className="text-xs uppercase tracking-[0.35em] text-accent">
+            Treatments
+          </p>
+
+          <h2 className="mt-4 text-balance text-4xl md:text-5xl">
+            A complete range of care.
+          </h2>
+        </div>
+
+        <Link
+          to="/treatments"
+          className="inline-flex items-center gap-2 text-sm font-medium hover:text-accent"
+        >
+          View all treatments
+          <ArrowRight className="size-4" />
+        </Link>
+      </div>
+    </Reveal>
+
+    <div className="mt-14 grid gap-6 md:grid-cols-3">
+      {(treatments ?? []).slice(0, 3).map((t: any, i: number) => (
+        <Reveal key={t.id} delay={i * 0.08}>
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.3 }}
+            className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card transition-shadow hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]"
+          >
+            {/* Treatment Image */}
+            {t.image_url ? (
+              <div className="aspect-[4/3] w-full overflow-hidden">
+                <img
+                  src={t.image_url}
+                  alt={t.name}
+                  className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
               </div>
-              <Link to="/treatments" className="inline-flex items-center gap-2 text-sm font-medium hover:text-accent">
-                View all treatments <ArrowRight className="size-4" />
+            ) : (
+              <div className="p-8 pb-0">
+                <div className="grid size-12 place-items-center rounded-2xl bg-secondary text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                  <Sparkles className="size-5" />
+                </div>
+              </div>
+            )}
+
+            {/* Treatment Content */}
+            <div className="flex flex-1 flex-col p-8">
+              <h3 className="text-2xl">{t.name}</h3>
+
+              <p className="mt-3 flex-1 text-sm text-muted-foreground">
+                {t.short_description || t.description}
+              </p>
+
+              <Link
+                to="/treatments"
+                className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent"
+              >
+                Learn more
+                <ArrowRight className="size-4" />
               </Link>
             </div>
-          </Reveal>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {(treatments ?? []).slice(0, 3).map((t: any, i: number) => (
-              <Reveal key={t.id} delay={i * 0.08}>
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.3 }}
-                  className="group relative flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 transition-shadow hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]"
-                >
-                  <div className="grid size-12 place-items-center rounded-2xl bg-secondary text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
-                    <Sparkles className="size-5" />
-                  </div>
-                  <h3 className="mt-6 text-2xl">{t.name}</h3>
-                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{t.description}</p>
-                  <Link to="/treatments" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent">
-                    Learn more <ArrowRight className="size-4" />
-                  </Link>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
+          </motion.div>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>
       {/* WHY CHOOSE US */}
       <section className="container-px mx-auto max-w-7xl py-24 md:py-32">
         <div className="grid gap-14 md:grid-cols-[1fr_1.2fr]">
