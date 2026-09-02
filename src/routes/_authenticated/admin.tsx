@@ -22,7 +22,6 @@ type Section =
   | "Bookings"
   | "Hero"
   | "About"
-  | "Contact"
   | "Site Settings"
   | "Footer"
   | "Navigation"
@@ -48,8 +47,9 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Pages",
+    label: "Website",
     items: [
+      { label: "Clinic Name & Contact", section: "Site Settings" },
       { label: "Home — Hero", section: "Hero" },
       { label: "About", section: "About" },
       { label: "Doctors", section: "Doctors" },
@@ -57,14 +57,12 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Gallery", section: "Gallery" },
       { label: "Testimonials", section: "Testimonials" },
       { label: "FAQs", section: "FAQs" },
-      { label: "Contact", section: "Contact" },
       { label: "Page Visibility", section: "Page Visibility" },
     ],
   },
   {
-    label: "Shared Website Content",
+    label: "Menus & Footer",
     items: [
-      { label: "Global Settings", section: "Site Settings" },
       { label: "Navigation Menu", section: "Navigation" },
       { label: "Footer Content", section: "Footer" },
       { label: "Footer Links", section: "Footer Links" },
@@ -200,11 +198,11 @@ function AdminPage() {
             <SingletonEditor
               table="site_settings"
               queryKey={contentKeys.settings}
-              title="Global Settings"
-              description="Brand identity, floating buttons and SEO defaults. Phone, email, address and map live under Pages → Contact."
+              title="Clinic Name & Contact"
+              description="Manage the clinic identity and the contact details used throughout the website."
               groups={[
                 {
-                  label: "Brand",
+                  label: "Clinic identity",
                   fields: [
                     { key: "clinic_name", label: "Clinic name" },
                     { key: "brand_line", label: "Brand line" },
@@ -215,51 +213,42 @@ function AdminPage() {
                   ],
                 },
                 {
-                  label: "Floating buttons",
-                  description: "The round buttons shown at the bottom-right of every page.",
+                  label: "Contact details",
+                  description: "These details appear on the home, contact, header and footer areas.",
+                  fields: [
+                    { key: "phone", label: "Phone" },
+                    { key: "emergency_phone", label: "Emergency phone" },
+                    { key: "email", label: "Email" },
+                    { key: "address", label: "Address", type: "textarea" },
+                  ],
+                },
+                {
+                  label: "Google Maps",
+                  fields: [
+                    { key: "google_maps_link", label: "Google Maps link", placeholder: "https://maps.google.com/…", type: "url" },
+                    { key: "google_maps_embed", label: "Google Maps embed URL", placeholder: "https://www.google.com/maps/embed?pb=…", type: "url" },
+                  ],
+                },
+                {
+                  label: "Quick contact buttons",
+                  description: "Choose which contact shortcuts appear at the bottom-right of the website.",
                   fields: [
                     { key: "show_call", label: "Show call button", type: "boolean" },
-                    { key: "call_button_link", label: "Call button link (tel:…) — leave empty to use the contact phone", type: "url" },
+                    { key: "call_button_link", label: "Call link (leave empty to use phone)", type: "url" },
                     { key: "show_whatsapp", label: "Show WhatsApp button", type: "boolean" },
-                    { key: "whatsapp_number", label: "WhatsApp number (e.g. +15551234567)" },
+                    { key: "whatsapp_number", label: "WhatsApp number" },
                     { key: "whatsapp_message", label: "Default WhatsApp message", type: "textarea" },
                     { key: "show_telegram", label: "Show Telegram button", type: "boolean" },
                     { key: "telegram_link", label: "Telegram link", type: "url" },
                   ],
                 },
                 {
-                  label: "SEO defaults",
+                  label: "Search & social sharing",
                   fields: [
                     { key: "meta_title", label: "Default SEO title" },
                     { key: "meta_description", label: "Default SEO description", type: "textarea" },
                     { key: "meta_keywords", label: "SEO keywords" },
                     { key: "og_image_url", label: "Social share image", type: "image" },
-                  ],
-                },
-              ]}
-            />
-          )}
-          {section === "Contact" && (
-            <SingletonEditor
-              table="site_settings"
-              queryKey={contentKeys.settings}
-              title="Contact"
-              description="These details appear on the contact page, header, footer and home page."
-              groups={[
-                {
-                  label: "Contact details",
-                  fields: [
-                    { key: "phone", label: "Phone (shown site-wide)" },
-                    { key: "emergency_phone", label: "Emergency phone" },
-                    { key: "email", label: "Email (shown site-wide)" },
-                    { key: "address", label: "Address (shown site-wide)", type: "textarea" },
-                  ],
-                },
-                {
-                  label: "Map",
-                  fields: [
-                    { key: "google_maps_link", label: "Google Maps link (opens map in a new tab)", placeholder: "https://maps.google.com/…", type: "url" },
-                    { key: "google_maps_embed", label: "Google Maps embed URL (the src=\"…\" URL from Share → Embed a map)", placeholder: "https://www.google.com/maps/embed?pb=…", type: "url" },
                   ],
                 },
               ]}
@@ -423,13 +412,9 @@ function Overview() {
     <Card className="p-6">
       <h2 className="font-display text-2xl">Welcome</h2>
       <p className="mt-3 text-sm text-muted-foreground">
-        Use the sidebar to edit any section of the site. Changes are live the moment you save.
+        Choose a section from the menu, make your changes, then select Save. Changes appear on the website immediately.
       </p>
-      <ul className="mt-6 grid gap-3 text-sm">
-        <li>• <strong>Hero</strong>, <strong>About</strong>, <strong>Footer</strong>, and <strong>Site Settings</strong> are single-form editors.</li>
-        <li>• <strong>Treatments</strong>, <strong>Doctors</strong>, <strong>Gallery</strong>, <strong>Testimonials</strong>, <strong>FAQs</strong>, <strong>Navigation</strong>, and social/footer links support add / reorder / hide / delete.</li>
-        <li>• <strong>Media Library</strong> is a shared file store — uploads from any editor land here too.</li>
-      </ul>
+      <p className="mt-5 text-sm text-muted-foreground">Start with <strong className="text-foreground">Clinic Name & Contact</strong> for your shared clinic details, or choose a website page to edit its content.</p>
     </Card>
   );
 }
