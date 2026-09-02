@@ -1,0 +1,4 @@
+- [ ] Prevent saved branding from flashing defaults during initial load
+- [ ] Simplify admin navigation and settings organization
+- [ ] Remove Contact admin tab and move Email/Google Maps into Clinic Name & Contact
+- [ ] Verify build and responsive behavior
