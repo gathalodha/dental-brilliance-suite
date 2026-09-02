@@ -25,11 +25,11 @@ const reasons = [
 ];
 
 function HomePage() {
-  const { data: hero } = useHeroContent();
-  const { data: about } = useAboutContent();
-  const { data: treatments } = useTreatments();
-  const { data: testimonials } = useTestimonials();
-  const { data: settings } = useSiteSettings();
+  const { data: hero, isPending: heroPending } = useHeroContent();
+  const { data: about, isPending: aboutPending } = useAboutContent();
+  const { data: treatments, isPending: treatmentsPending } = useTreatments();
+  const { data: testimonials, isPending: testimonialsPending } = useTestimonials();
+  const { data: settings, isPending: settingsPending } = useSiteSettings();
 
   const phone = settings?.phone ?? "";
   const emergencyPhone = settings?.emergency_phone ?? "";
@@ -49,6 +49,10 @@ function HomePage() {
     { value: "4.9★", label: "Patient rating" },
     { value: `${about?.stat_treatments ?? 6}`, label: "Board specialists" },
   ];
+
+  if (heroPending || aboutPending || treatmentsPending || testimonialsPending || settingsPending) {
+    return <div className="min-h-[70vh]" aria-hidden="true" />;
+  }
 
 
   return (

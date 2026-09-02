@@ -16,14 +16,16 @@ export function SiteFooter() {
   const { data: footer } = useFooterContent();
   const { data: links } = useFooterLinks();
   const { data: socials } = useSocialLinks();
-  const { data: settings } = useSiteSettings();
-  const { data: pageVis } = usePageVisibility();
+  const { data: settings, isPending: settingsPending } = useSiteSettings();
+  const { data: pageVis, isPending: visibilityPending } = usePageVisibility();
 
-  const clinicName = settings?.clinic_name ?? "Maison Dentaire";
+  const clinicName = settings?.clinic_name ?? "";
   const logo = settings?.logo_url as string | null | undefined;
   const address = settings?.address ?? "";
   const phone = settings?.phone ?? "";
   const email = settings?.email ?? "";
+
+  if (settingsPending || visibilityPending) return null;
 
   const visibleLinks = (links ?? []).filter((l: any) => {
     const slug = slugFromHref(l.href);

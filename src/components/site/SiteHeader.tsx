@@ -7,9 +7,9 @@ import { useNavigation, useSiteSettings, usePageVisibility, slugFromHref, isPage
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { data: nav } = useNavigation();
-  const { data: pageVis } = usePageVisibility();
-  const { data: settings } = useSiteSettings();
+  const { data: nav, isPending: navPending } = useNavigation();
+  const { data: pageVis, isPending: visibilityPending } = usePageVisibility();
+  const { data: settings, isPending: settingsPending } = useSiteSettings();
 
   const visibleNav = (nav ?? []).filter((n: any) => {
     const slug = slugFromHref(n.href);
@@ -24,9 +24,13 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const clinicName = settings?.clinic_name ?? "Maison Dentaire";
+  const clinicName = settings?.clinic_name ?? "";
   const phone = settings?.phone ?? "";
   const logo = settings?.logo_url as string | null | undefined;
+
+  if (settingsPending || navPending || visibilityPending) {
+    return <div className="h-20" aria-hidden="true" />;
+  }
 
   return (
     <header

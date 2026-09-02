@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { uploadMedia } from "@/lib/media";
-import { Loader2, Upload, Trash2, Plus, ArrowUp, ArrowDown } from "lucide-react";
+import { Loader2, Upload, Trash2, Plus, ArrowUp, ArrowDown, ChevronDown } from "lucide-react";
 
 type FieldType = "text" | "textarea" | "number" | "url" | "boolean" | "image" | "array" | "date";
 
@@ -207,8 +207,10 @@ function RowEditor({
   onDown?: () => void;
 }) {
   const [form, setForm] = useState(row);
+  const [open, setOpen] = useState(false);
   useEffect(() => setForm(row), [row]);
   const dirty = JSON.stringify(form) !== JSON.stringify(row);
+  const itemTitle = row.name ?? row.label ?? row.patient_name ?? row.question ?? row.caption ?? row.platform ?? "Untitled item";
 
   const save = useMutation({
     mutationFn: async () => {
@@ -221,26 +223,43 @@ function RowEditor({
   });
 
   return (
-    <Card className="p-5">
-      <div className="grid gap-4 md:grid-cols-2">
-        {fields.map((f) => (
-          <FieldInput key={f.key} field={f} value={form[f.key]} onChange={(v) => setForm({ ...form, [f.key]: v })} />
-        ))}
-      </div>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex gap-1">
-          <Button size="icon" variant="outline" disabled={!onUp} onClick={onUp}><ArrowUp className="size-4" /></Button>
-          <Button size="icon" variant="outline" disabled={!onDown} onClick={onDown}><ArrowDown className="size-4" /></Button>
+    <Card className="overflow-hidden p-0">
+      <Button
+        type="button"
+        variant="ghost"
+        className="h-auto w-full justify-between rounded-none px-5 py-4 text-left"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+      >
+        <span className="min-w-0 truncate">{itemTitle}</span>
+        <span className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
+          {typeof row.visible === "boolean" && (row.visible ? "Visible" : "Hidden")}
+          <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
+        </span>
+      </Button>
+      {open && (
+        <div className="border-t p-5">
+          <div className="grid gap-4 md:grid-cols-2">
+            {fields.map((f) => (
+              <FieldInput key={f.key} field={f} value={form[f.key]} onChange={(v) => setForm({ ...form, [f.key]: v })} />
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex gap-1">
+              <Button aria-label="Move up" size="icon" variant="outline" disabled={!onUp} onClick={onUp}><ArrowUp className="size-4" /></Button>
+              <Button aria-label="Move down" size="icon" variant="outline" disabled={!onDown} onClick={onDown}><ArrowDown className="size-4" /></Button>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={onDelete}>
+                <Trash2 className="mr-2 size-4" /> Delete
+              </Button>
+              <Button size="sm" disabled={!dirty || save.isPending} onClick={() => save.mutate()}>
+                {save.isPending ? "Saving…" : "Save"}
+              </Button>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={onDelete}>
-            <Trash2 className="mr-2 size-4" /> Delete
-          </Button>
-          <Button size="sm" disabled={!dirty || save.isPending} onClick={() => save.mutate()}>
-            {save.isPending ? "Saving…" : "Save"}
-          </Button>
-        </div>
-      </div>
+      )}
     </Card>
   );
 }
