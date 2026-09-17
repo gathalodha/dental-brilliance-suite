@@ -302,6 +302,36 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_carousel_images: {
+        Row: {
+          alt_text: string
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          alt_text?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          alt_text?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       hero_content: {
         Row: {
           background_video_url: string | null

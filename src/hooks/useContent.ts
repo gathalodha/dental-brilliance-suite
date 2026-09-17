@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const contentKeys = {
   settings: ["site_settings"] as const,
   hero: ["hero_content"] as const,
+  heroCarousel: ["hero_carousel_images"] as const,
   about: ["about_content"] as const,
   footer: ["footer_content"] as const,
   navigation: ["navigation_items"] as const,
@@ -55,6 +56,7 @@ function list<T>(table: string, key: readonly string[], visibleOnly = true) {
 
 
 export const useNavigation = list<any>("navigation_items", contentKeys.navigation);
+export const useHeroCarousel = list<any>("hero_carousel_images", contentKeys.heroCarousel);
 export const useTreatments = list<any>("treatments", contentKeys.treatments);
 export const useDoctors = list<any>("doctors", contentKeys.doctors);
 export const useGallery = list<any>("gallery_images", contentKeys.gallery);

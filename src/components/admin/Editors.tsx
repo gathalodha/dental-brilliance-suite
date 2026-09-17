@@ -195,6 +195,117 @@ export function ListEditor({
   );
 }
 
+export function HeroCarouselEditor() {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  const queryKey = ["hero_carousel_images", "admin"] as const;
+  const { data, isLoading } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("hero_carousel_images").select("*").order("display_order");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const refresh = () => {
+    qc.invalidateQueries({ queryKey });
+    qc.invalidateQueries({ queryKey: ["hero_carousel_images"] });
+  };
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("hero_carousel_images").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Image removed"); refresh(); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const reorder = async (id: string, direction: -1 | 1) => {
+    if (!data) return;
+    const index = data.findIndex((item) => item.id === id);
+    const current = data[index];
+    const swap = data[index + direction];
+    if (!current || !swap) return;
+    const [{ error: currentError }, { error: swapError }] = await Promise.all([
+      supabase.from("hero_carousel_images").update({ display_order: swap.display_order }).eq("id", current.id),
+      supabase.from("hero_carousel_images").update({ display_order: current.display_order }).eq("id", swap.id),
+    ]);
+    if (currentError || swapError) {
+      toast.error(currentError?.message ?? swapError?.message ?? "Could not reorder images");
+      return;
+    }
+    refresh();
+  };
+
+  return (
+    <Card className="p-5 md:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h2 className="font-display text-2xl">Hero carousel images</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Upload images and use the arrows to choose their display order.</p>
+        </div>
+        <Button asChild disabled={busy}>
+          <label className="cursor-pointer">
+            {busy ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
+            Add images
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={async (event) => {
+                const files = Array.from(event.target.files ?? []);
+                if (!files.length) return;
+                setBusy(true);
+                try {
+                  const urls = await Promise.all(files.map(uploadMedia));
+                  const firstOrder = (data?.reduce((max, item) => Math.max(max, item.display_order), 0) ?? 0) + 1;
+                  const rows = urls.map((imageUrl, index) => ({
+                    image_url: imageUrl,
+                    alt_text: "Dental clinic",
+                    display_order: firstOrder + index,
+                    visible: true,
+                  }));
+                  const { error } = await supabase.from("hero_carousel_images").insert(rows);
+                  if (error) throw error;
+                  toast.success(files.length === 1 ? "Image added" : `${files.length} images added`);
+                  refresh();
+                } catch (error) {
+                  toast.error(error instanceof Error ? error.message : "Could not add images");
+                } finally {
+                  setBusy(false);
+                  event.target.value = "";
+                }
+              }}
+            />
+          </label>
+        </Button>
+      </div>
+
+      {isLoading ? <Loader2 className="mt-6 animate-spin" /> : (
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {(data ?? []).map((image, index) => (
+            <div key={image.id} className="overflow-hidden rounded-lg border bg-card">
+              <img src={image.image_url} alt={image.alt_text || "Hero carousel"} className="aspect-[4/3] w-full object-cover" />
+              <div className="flex items-center justify-between gap-2 p-3">
+                <span className="text-xs text-muted-foreground">Image {index + 1}</span>
+                <div className="flex gap-1">
+                  <Button aria-label="Move image up" size="icon" variant="outline" disabled={index === 0} onClick={() => reorder(image.id, -1)}><ArrowUp className="size-4" /></Button>
+                  <Button aria-label="Move image down" size="icon" variant="outline" disabled={index === data.length - 1} onClick={() => reorder(image.id, 1)}><ArrowDown className="size-4" /></Button>
+                  <Button aria-label="Delete image" size="icon" variant="outline" disabled={remove.isPending} onClick={() => { if (confirm("Remove this hero image?")) remove.mutate(image.id); }}><Trash2 className="size-4" /></Button>
+                </div>
+              </div>
+            </div>
+          ))}
+          {(data ?? []).length === 0 && <p className="text-sm text-muted-foreground sm:col-span-2">No carousel images yet. The existing hero image remains visible until you add one.</p>}
+        </div>
+      )}
+    </Card>
+  );
+}
+
 function RowEditor({
   row, fields, table, onSaved, onDelete, onUp, onDown,
 }: {

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SingletonEditor, ListEditor, type FieldDef } from "@/components/admin/Editors";
+import { HeroCarouselEditor, SingletonEditor, ListEditor, type FieldDef } from "@/components/admin/Editors";
 import { contentKeys } from "@/hooks/useContent";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -158,24 +158,27 @@ function AdminPage() {
           {section === "Overview" && <Overview />}
           {section === "Bookings" && <Bookings />}
           {section === "Hero" && (
-            <SingletonEditor
-              table="hero_content"
-              queryKey={contentKeys.hero}
-              title="Hero Section"
-              fields={[
-                { key: "brand_line", label: "Brand line / tagline" },
-                { key: "heading", label: "Main heading" },
-                { key: "subheading", label: "Subheading", type: "textarea" },
-                { key: "image_url", label: "Hero image", type: "image" },
-                { key: "background_video_url", label: "Background video URL", type: "url" },
-                { key: "cta_text", label: "Primary CTA text" },
-                { key: "cta_link", label: "Primary CTA link", type: "url" },
-                { key: "cta_enabled", label: "Show primary CTA", type: "boolean" },
-                { key: "secondary_cta_text", label: "Secondary CTA text" },
-                { key: "secondary_cta_link", label: "Secondary CTA link", type: "url" },
-                { key: "secondary_cta_enabled", label: "Show secondary CTA", type: "boolean" },
-              ]}
-            />
+            <div className="space-y-6">
+              <HeroCarouselEditor />
+              <SingletonEditor
+                table="hero_content"
+                queryKey={contentKeys.hero}
+                title="Hero text and buttons"
+                fields={[
+                  { key: "brand_line", label: "Brand line / tagline" },
+                  { key: "heading", label: "Main heading" },
+                  { key: "subheading", label: "Subheading", type: "textarea" },
+                  { key: "image_url", label: "Fallback image", type: "image" },
+                  { key: "background_video_url", label: "Background video URL", type: "url" },
+                  { key: "cta_text", label: "Primary CTA text" },
+                  { key: "cta_link", label: "Primary CTA link", type: "url" },
+                  { key: "cta_enabled", label: "Show primary CTA", type: "boolean" },
+                  { key: "secondary_cta_text", label: "Secondary CTA text" },
+                  { key: "secondary_cta_link", label: "Secondary CTA link", type: "url" },
+                  { key: "secondary_cta_enabled", label: "Show secondary CTA", type: "boolean" },
+                ]}
+              />
+            </div>
           )}
           {section === "About" && (
             <SingletonEditor
@@ -589,7 +592,7 @@ function PageVisibilityEditor() {
               <span className="text-xs text-muted-foreground">{row.visible ? "Visible" : "Hidden"}</span>
               <input
                 type="checkbox"
-                className="size-5 accent-[var(--bronze)]"
+                className="size-5 accent-[var(--accent)]"
                 checked={Boolean(row.visible)}
                 onChange={(e) => toggle.mutate({ slug: row.slug, visible: e.target.checked })}
               />

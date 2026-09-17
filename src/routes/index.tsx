@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
 import heroImage from "@/assets/hero-clinic.jpg";
 import { Reveal } from "@/components/site/Reveal";
-import { useHeroContent, useAboutContent, useTreatments, useTestimonials, useSiteSettings } from "@/hooks/useContent";
+import { useHeroContent, useHeroCarousel, useAboutContent, useTreatments, useTestimonials, useSiteSettings } from "@/hooks/useContent";
+import { HeroImageCarousel } from "@/components/site/HeroImageCarousel";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,6 +27,7 @@ const reasons = [
 
 function HomePage() {
   const { data: hero, isPending: heroPending } = useHeroContent();
+  const { data: carouselImages, isPending: carouselPending } = useHeroCarousel();
   const { data: about, isPending: aboutPending } = useAboutContent();
   const { data: treatments, isPending: treatmentsPending } = useTreatments();
   const { data: testimonials, isPending: testimonialsPending } = useTestimonials();
@@ -40,6 +42,9 @@ function HomePage() {
   const heading = hero?.heading ?? "A quieter kind of dentistry.";
   const subheading = hero?.subheading ?? "Clinical excellence meets considered design.";
   const heroImg = hero?.image_url || heroImage;
+  const heroImages = carouselImages?.length
+    ? carouselImages
+    : [{ id: "default-hero", image_url: heroImg, alt_text: "Serene modern dental clinic interior" }];
   const primary = { text: hero?.cta_text ?? "Book a consultation", link: hero?.cta_link ?? "/contact", show: hero?.cta_enabled ?? true };
   const secondary = { text: hero?.secondary_cta_text ?? "Explore treatments", link: hero?.secondary_cta_link ?? "/treatments", show: hero?.secondary_cta_enabled ?? true };
 
@@ -50,7 +55,7 @@ function HomePage() {
     { value: `${about?.stat_treatments ?? 6}`, label: "Board specialists" },
   ];
 
-  if (heroPending || aboutPending || treatmentsPending || testimonialsPending || settingsPending) {
+  if (heroPending || carouselPending || aboutPending || treatmentsPending || testimonialsPending || settingsPending) {
     return <div className="min-h-[70vh]" aria-hidden="true" />;
   }
 
@@ -60,6 +65,32 @@ function HomePage() {
       {/* HERO */}
       <section className="relative">
         <div className="container-px mx-auto grid max-w-7xl gap-12 pb-20 pt-10 md:grid-cols-[1.05fr_1fr] md:pt-16 md:pb-32">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
+          >
+            <HeroImageCarousel images={heroImages} />
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.6 }}
+              className="glass absolute -bottom-6 -left-6 hidden max-w-[260px] rounded-2xl p-5 md:block"
+            >
+              <div className="flex items-center gap-1 text-accent">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="size-4 fill-current" />
+                ))}
+              </div>
+              <p className="mt-2 text-sm text-foreground/85">
+                "Genuinely the most beautiful clinic I've walked into."
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">— Verified patient review</p>
+            </motion.div>
+          </motion.div>
+
           <div className="flex flex-col justify-center">
             <motion.p
               initial={{ opacity: 0, y: 10 }}
@@ -123,38 +154,6 @@ function HomePage() {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
-            <div className="relative overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_color-mix(in_oklab,var(--cocoa)_45%,transparent)]">
-              <img
-                src={heroImg}
-                alt="Serene modern dental clinic interior"
-                className="h-[520px] w-full object-cover md:h-[640px]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-cocoa/25 via-transparent to-transparent" />
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.6 }}
-              className="glass absolute -bottom-6 -left-6 hidden max-w-[260px] rounded-2xl p-5 md:block"
-            >
-              <div className="flex items-center gap-1 text-accent">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="size-4 fill-current" />
-                ))}
-              </div>
-              <p className="mt-2 text-sm text-foreground/85">
-                "Genuinely the most beautiful clinic I've walked into."
-              </p>
-              <p className="mt-2 text-xs text-muted-foreground">— Verified patient review</p>
-            </motion.div>
-          </motion.div>
         </div>
       </section>
 
