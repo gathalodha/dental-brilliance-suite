@@ -293,7 +293,7 @@ export function HeroCarouselEditor() {
                 <span className="text-xs text-muted-foreground">Image {index + 1}</span>
                 <div className="flex gap-1">
                   <Button aria-label="Move image up" size="icon" variant="outline" disabled={index === 0} onClick={() => reorder(image.id, -1)}><ArrowUp className="size-4" /></Button>
-                  <Button aria-label="Move image down" size="icon" variant="outline" disabled={index === data.length - 1} onClick={() => reorder(image.id, 1)}><ArrowDown className="size-4" /></Button>
+                  <Button aria-label="Move image down" size="icon" variant="outline" disabled={index === (data?.length ?? 0) - 1} onClick={() => reorder(image.id, 1)}><ArrowDown className="size-4" /></Button>
                   <Button aria-label="Delete image" size="icon" variant="outline" disabled={remove.isPending} onClick={() => { if (confirm("Remove this hero image?")) remove.mutate(image.id); }}><Trash2 className="size-4" /></Button>
                 </div>
               </div>

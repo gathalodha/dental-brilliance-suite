@@ -36,11 +36,11 @@ export function SiteHeader() {
     <header
       className={cn(
         "sticky top-0 z-50 transition-all duration-300",
-        scrolled ? "glass shadow-[0_1px_0_0_color-mix(in_oklab,var(--bronze)_15%,transparent)]" : "bg-transparent"
+        scrolled ? "glass shadow-[0_10px_35px_-30px_color-mix(in_oklab,var(--primary)_45%,transparent)]" : "bg-transparent"
       )}
     >
-      <div className="container-px mx-auto flex h-20 max-w-7xl items-center justify-between">
-        <Link to="/" className="group flex items-center gap-2">
+      <div className="container-px mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:h-20 lg:flex lg:justify-between">
+        <Link to="/" className="group flex min-w-0 items-center gap-2">
           {logo ? (
             <img src={logo} alt={clinicName} className="size-9 rounded-full object-cover" />
           ) : (
@@ -48,7 +48,7 @@ export function SiteHeader() {
               {clinicName.slice(0, 1).toLowerCase()}
             </span>
           )}
-          <span className="font-display text-xl tracking-tight">{clinicName}</span>
+          <span className="truncate font-display text-xl">{clinicName}</span>
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
@@ -80,7 +80,7 @@ export function SiteHeader() {
 
         <button
           aria-label={open ? "Close menu" : "Open menu"}
-          className="grid size-10 place-items-center rounded-full border border-border lg:hidden"
+          className="grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card shadow-sm transition-colors hover:bg-secondary lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -88,15 +88,15 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="lg:hidden">
-          <div className="container-px mx-auto max-w-7xl border-t border-border/60 py-4">
+        <div className="border-t border-border/60 bg-background/95 shadow-lg backdrop-blur lg:hidden">
+          <div className="container-px mx-auto max-w-7xl py-3">
             <div className="flex flex-col gap-1">
               {visibleNav.map((n: any) => (
                 <a
                   key={n.id}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-3 text-base hover:bg-secondary"
+                  className="flex min-h-12 items-center rounded-xl px-3 py-3 text-base transition-colors hover:bg-secondary"
                 >
                   {n.label}
                 </a>
@@ -104,7 +104,7 @@ export function SiteHeader() {
               <Link
                 to="/contact"
                 onClick={() => setOpen(false)}
-                className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground"
+                className="mt-2 inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground"
               >
                 Book a visit
               </Link>
