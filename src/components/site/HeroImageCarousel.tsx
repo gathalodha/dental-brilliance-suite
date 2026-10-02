@@ -9,7 +9,7 @@ export type HeroCarouselImage = {
   alt_text?: string | null;
 };
 
-export function HeroImageCarousel({ images }: { images: HeroCarouselImage[] }) {
+export function HeroImageCarousel({ images, expanded = false }: { images: HeroCarouselImage[]; expanded?: boolean }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
   const hasMultiple = images.length > 1;
@@ -33,7 +33,7 @@ export function HeroImageCarousel({ images }: { images: HeroCarouselImage[] }) {
   if (!activeImage) return null;
 
   return (
-    <div className="relative h-[520px] overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_color-mix(in_oklab,var(--cocoa)_35%,transparent)] md:h-[640px]">
+    <div className={expanded ? "relative size-full overflow-hidden" : "relative aspect-[4/5] overflow-hidden rounded-[1.5rem] shadow-[0_24px_60px_-32px_color-mix(in_oklab,var(--primary)_38%,transparent)] md:h-[640px] md:aspect-auto md:rounded-[2rem]"}>
       <AnimatePresence initial={false} mode="popLayout">
         <motion.img
           key={activeImage.id}

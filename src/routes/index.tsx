@@ -5,6 +5,7 @@ import heroImage from "@/assets/hero-clinic.jpg";
 import { Reveal } from "@/components/site/Reveal";
 import { useHeroContent, useHeroCarousel, useAboutContent, useTreatments, useTestimonials, useSiteSettings } from "@/hooks/useContent";
 import { HeroImageCarousel } from "@/components/site/HeroImageCarousel";
+import { ScrollExpand } from "@/components/site/ScrollExpand";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -65,12 +66,7 @@ function HomePage() {
       {/* HERO */}
       <section className="relative">
         <div className="container-px mx-auto grid max-w-7xl gap-12 pb-20 pt-10 md:grid-cols-[1.05fr_1fr] md:pt-16 md:pb-32">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
+          <ScrollExpand className="relative">
             <HeroImageCarousel images={heroImages} />
 
             <motion.div
@@ -89,7 +85,7 @@ function HomePage() {
               </p>
               <p className="mt-2 text-xs text-muted-foreground">— Verified patient review</p>
             </motion.div>
-          </motion.div>
+          </ScrollExpand>
 
           <div className="flex flex-col justify-center">
             <motion.p
