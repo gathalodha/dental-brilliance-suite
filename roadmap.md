@@ -1,9 +1,11 @@
 - [x] Prevent saved branding from flashing defaults during initial load
 - [x] Simplify admin navigation and settings organization
 - [x] Remove Contact admin tab and move Email/Google Maps into Clinic Name & Contact
-- [x] Verify prior build state
-- [ ] Apply premium blue-and-white theme without layout changes
-- [ ] Add Supabase-backed ordered Home hero images
-- [ ] Add hero carousel image management to the existing admin panel
-- [ ] Add the responsive auto-advancing Home hero carousel
-- [ ] Verify build, runtime, database, admin flow, and responsive UI
+- [x] Apply premium blue-and-white theme without layout changes
+- [x] Add Supabase-backed ordered Home hero images
+- [x] Add hero carousel image management to the existing admin panel
+- [x] Add the responsive auto-advancing Home hero carousel
+- [ ] Add the scroll-expanding existing hero image with reduced-motion support
+- [ ] Polish mobile navigation, spacing, typography, controls, and image/content cards
+- [ ] Preserve and lightly polish the desktop layouts
+- [ ] Verify build, runtime, content routes, and common phone widths
