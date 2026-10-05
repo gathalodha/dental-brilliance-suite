@@ -5,7 +5,7 @@
 - [x] Add Supabase-backed ordered Home hero images
 - [x] Add hero carousel image management to the existing admin panel
 - [x] Add the responsive auto-advancing Home hero carousel
-- [ ] Add the scroll-expanding existing hero image with reduced-motion support
-- [ ] Polish mobile navigation, spacing, typography, controls, and image/content cards
+- [x] Add the scroll-expanding existing hero image with reduced-motion support
+- [x] Polish mobile navigation, spacing, typography, controls, and image/content cards
 - [ ] Preserve and lightly polish the desktop layouts
 - [ ] Verify build, runtime, content routes, and common phone widths
