@@ -56,7 +56,23 @@ function list<T>(table: string, key: readonly string[], visibleOnly = true) {
 
 
 export const useNavigation = list<any>("navigation_items", contentKeys.navigation);
-export const useHeroCarousel = list<any>("hero_carousel_images", contentKeys.heroCarousel);
+export function useHeroCarousel() {
+  return useQuery({
+    queryKey: [...contentKeys.heroCarousel, { visibleOnly: true }],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hero_carousel_images" as any)
+        .select("*")
+        .eq("visible", true)
+        .order("display_order", { ascending: true });
+      // Fall back to the default hero image if the carousel isn't available.
+      if (error) return [] as any[];
+      return (data ?? []) as any[];
+    },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+}
 export const useTreatments = list<any>("treatments", contentKeys.treatments);
 export const useDoctors = list<any>("doctors", contentKeys.doctors);
 export const useGallery = list<any>("gallery_images", contentKeys.gallery);

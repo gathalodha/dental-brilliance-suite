@@ -1,4 +1,4 @@
-import { pageHead, jsonLd, dentistSchema } from "@/lib/seo";
+import { pageHead, jsonLd, dentistSchema, telHref as toTelHref } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
@@ -30,7 +30,7 @@ function HomePage() {
 
   const phone = settings?.phone ?? "";
   const emergencyPhone = settings?.emergency_phone ?? "";
-  const telHref = settings?.call_button_link || (phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : "/contact");
+  const telHref = toTelHref(settings?.call_button_link || phone) ?? "/contact";
 
 
   const brandLine = hero?.brand_line ?? "Boutique Dental Practice";
