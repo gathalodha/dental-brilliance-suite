@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
@@ -7,14 +8,7 @@ import { cn } from "@/lib/utils";
 import { useFaqs } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/faqs")({
-  head: () => ({
-    meta: [
-      { title: "FAQs — Maison Dentaire" },
-      { name: "description", content: "Answers to the questions patients most often ask about visits, treatments, comfort, insurance and financing at Maison Dentaire." },
-      { property: "og:title", content: "FAQs — Maison Dentaire" },
-      { property: "og:description", content: "Common questions about visits, treatments, and financing." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/faqs", "Dental FAQs | Dental Brilliance Suite, Nashik", "Answers to common questions about visits, treatments and appointments at Dental Brilliance Suite, a dental clinic in Nashik.") }),
   component: () => (<PageGate slug="faqs"><FaqPage /></PageGate>),
 });
 

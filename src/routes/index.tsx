@@ -1,3 +1,4 @@
+import { pageHead, jsonLd, dentistSchema, telHref as toTelHref } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
@@ -8,14 +9,7 @@ import { HeroImageCarousel } from "@/components/site/HeroImageCarousel";
 import { ScrollExpandMedia } from "@/components/site/ScrollExpandMedia";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Maison Dentaire — Boutique Luxury Dental Care" },
-      { name: "description", content: "Boutique dental practice blending clinical excellence with a calm, spa-like experience. Cosmetic, restorative and preventive dentistry." },
-      { property: "og:title", content: "Maison Dentaire — Boutique Luxury Dental Care" },
-      { property: "og:description", content: "Boutique dental practice blending clinical excellence with a calm, spa-like experience." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/", "Dentist in Nashik | Dental Brilliance Suite – Dental Clinic", "Looking for a trusted dentist in Nashik? Dental Brilliance Suite offers teeth cleaning, dental implants, root canal treatment, orthodontics and cosmetic dentistry in Nashik, Maharashtra."), scripts: [jsonLd(dentistSchema)] }),
   component: HomePage,
 });
 
@@ -36,7 +30,7 @@ function HomePage() {
 
   const phone = settings?.phone ?? "";
   const emergencyPhone = settings?.emergency_phone ?? "";
-  const telHref = settings?.call_button_link || (phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : "/contact");
+  const telHref = toTelHref(settings?.call_button_link || phone) ?? "/contact";
 
 
   const brandLine = hero?.brand_line ?? "Boutique Dental Practice";
@@ -121,10 +115,10 @@ function HomePage() {
           <Reveal delay={0.1}>
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-secondary shadow-sm">
-                <img src={about?.image_url || heroImage} alt="" className="size-full object-cover" />
+                <img src={about?.image_url || heroImage} alt="Inside our dental clinic in Nashik" className="size-full object-cover" loading="lazy" decoding="async" />
               </div>
               <div className="mt-7 aspect-[3/4] overflow-hidden rounded-2xl bg-secondary shadow-sm md:mt-10">
-                <img src={about?.image_url || heroImage} alt="" className="size-full object-cover" />
+                <img src={about?.image_url || heroImage} alt="Inside our dental clinic in Nashik" className="size-full object-cover" loading="lazy" decoding="async" />
               </div>
             </div>
           </Reveal>
@@ -201,7 +195,7 @@ function HomePage() {
         <Reveal>
           <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 shadow-sm md:rounded-[2.5rem] md:p-16">
             <div className="grid gap-7 md:grid-cols-[1.4fr_1fr] md:items-center md:gap-8">
-              <div><h2 className="text-balance text-4xl leading-tight md:text-5xl">Ready for a <em className="italic text-accent">quieter</em> dental visit?</h2><p className="mt-4 max-w-lg text-muted-foreground">Same-week appointments. Complimentary consultations for new cosmetic patients.</p></div>
+              <div><h2 className="text-balance text-4xl leading-tight md:text-5xl">Ready for a <em className="italic text-accent">quieter</em> dental visit?</h2><p className="mt-4 max-w-lg text-muted-foreground">Visit our dental clinic in Nashik for check-ups, teeth cleaning, implants and root canal treatment. Same-week appointments. Complimentary consultations for new cosmetic patients.</p></div>
               <div className="flex flex-col gap-3 sm:flex-row md:flex-col md:items-end"><Link to="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent">Book a consultation <ArrowRight className="size-4" /></Link>{phone && <a href={telHref} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium hover:bg-secondary"><Phone className="size-4" /> {phone}</a>}</div>
             </div>
           </div>

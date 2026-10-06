@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Loader2 } from "lucide-react";
@@ -5,14 +6,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { useTreatments } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/treatments")({
-  head: () => ({
-    meta: [
-      { title: "Treatments — Maison Dentaire" },
-      { name: "description", content: "Cosmetic, restorative, preventive and specialty dental treatments delivered by a boutique team of board-certified specialists." },
-      { property: "og:title", content: "Treatments — Maison Dentaire" },
-      { property: "og:description", content: "Cosmetic, restorative, preventive and specialty dental treatments in a calm, boutique setting." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/treatments", "Dental Treatment in Nashik – Implants, Root Canal & More | Dental Brilliance Suite", "Dental treatment in Nashik: teeth cleaning, dental implants, root canal treatment, orthodontics, cosmetic and pediatric dentistry at Dental Brilliance Suite.") }),
   component: () => (<PageGate slug="treatments"><TreatmentsPage /></PageGate>),
 });
 

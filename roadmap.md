@@ -8,4 +8,5 @@
 - [x] Add the scroll-expanding existing hero image with reduced-motion support
 - [x] Polish mobile navigation, spacing, typography, controls, and image/content cards
 - [ ] Preserve and lightly polish the desktop layouts
-- [ ] Verify build, runtime, content routes, and common phone widths
+- [x] Verify build, runtime, content routes, and common phone widths
+- [x] Fix WhatsApp/call buttons, Nashik SEO metadata, schema, sitemap, robots

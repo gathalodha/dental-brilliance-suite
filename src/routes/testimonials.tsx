@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
@@ -5,14 +6,7 @@ import { Quote, Star, Loader2 } from "lucide-react";
 import { useTestimonials } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/testimonials")({
-  head: () => ({
-    meta: [
-      { title: "Testimonials — Maison Dentaire" },
-      { name: "description", content: "Real words from real patients — reflections on care, comfort and craft at Maison Dentaire." },
-      { property: "og:title", content: "Testimonials — Maison Dentaire" },
-      { property: "og:description", content: "Real words from real patients." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/testimonials", "Patient Testimonials | Dental Brilliance Suite, Nashik", "Read what patients say about their dental care experience at Dental Brilliance Suite in Nashik.") }),
   component: () => (<PageGate slug="testimonials"><TestimonialsPage /></PageGate>),
 });
 

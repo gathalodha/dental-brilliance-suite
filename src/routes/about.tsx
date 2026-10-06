@@ -1,17 +1,11 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
 import { Award, HeartHandshake, Sparkles, ShieldCheck, Leaf, Users } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — Maison Dentaire" },
-      { name: "description", content: "A boutique dental studio where clinical excellence meets calm, considered design. Meet the philosophy behind Maison Dentaire." },
-      { property: "og:title", content: "About Maison Dentaire" },
-      { property: "og:description", content: "Where clinical excellence meets calm, considered design." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/about", "About Our Dental Clinic in Nashik | Dental Brilliance Suite", "Learn about Dental Brilliance Suite, a modern dental clinic in Nashik, Maharashtra focused on gentle, transparent and comfortable dental care.") }),
   component: () => (<PageGate slug="about"><AboutPage /></PageGate>),
 });
 
