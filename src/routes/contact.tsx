@@ -1,3 +1,4 @@
+import { pageHead, jsonLd, dentistSchema } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from "lucide-react";
@@ -9,14 +10,7 @@ import { useSiteSettings } from "@/hooks/useContent";
 import { PageGate } from "@/components/site/PageGate";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact & Book — Maison Dentaire" },
-      { name: "description", content: "Book a consultation or reach the Maison Dentaire team. Same-week appointments and complimentary cosmetic consultations." },
-      { property: "og:title", content: "Contact & Book — Maison Dentaire" },
-      { property: "og:description", content: "Book a consultation or contact our team." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/contact", "Book a Dentist Appointment in Nashik | Dental Brilliance Suite", "Book an appointment with Dental Brilliance Suite in Nashik, Maharashtra. Call, WhatsApp or send a request and our team will confirm your visit."), scripts: [jsonLd(dentistSchema)] }),
   component: () => (
     <PageGate slug="contact">
       <ContactPage />

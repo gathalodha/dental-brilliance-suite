@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { LogOut, ExternalLink, Loader2, Trash2, Upload, Copy, Menu, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Maison Dentaire" }] }),
+  head: () => ({ meta: [{ title: "Admin — Dental Brilliance Suite" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: AdminPage,
 });
 

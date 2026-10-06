@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, GraduationCap, Loader2 } from "lucide-react";
@@ -5,14 +6,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { useDoctors } from "@/hooks/useContent";
 
 export const Route = createFileRoute("/doctors")({
-  head: () => ({
-    meta: [
-      { title: "Our Doctors — Maison Dentaire" },
-      { name: "description", content: "Meet the board-certified specialists behind Maison Dentaire — cosmetic, restorative, orthodontic and surgical expertise under one roof." },
-      { property: "og:title", content: "Our Doctors — Maison Dentaire" },
-      { property: "og:description", content: "Meet the specialists behind Maison Dentaire." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/doctors", "Our Dentists in Nashik | Dental Brilliance Suite", "Meet the dentists at Dental Brilliance Suite in Nashik and their experience in orthodontics, implants and everyday dental care.") }),
   component: () => (<PageGate slug="doctors"><DoctorsPage /></PageGate>),
 });
 

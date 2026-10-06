@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
@@ -7,14 +8,7 @@ import { useGallery } from "@/hooks/useContent";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/gallery")({
-  head: () => ({
-    meta: [
-      { title: "Gallery — Maison Dentaire" },
-      { name: "description", content: "A quiet look at our studio, our craft, and the smiles we've had the privilege of shaping." },
-      { property: "og:title", content: "Gallery — Maison Dentaire" },
-      { property: "og:description", content: "The studio, the craft, and the smiles." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/gallery", "Clinic Gallery | Dental Brilliance Suite, Nashik", "See inside Dental Brilliance Suite in Nashik – our clinic, equipment and the smiles we care for.") }),
   component: () => (<PageGate slug="gallery"><GalleryPage /></PageGate>),
 });
 

@@ -1,17 +1,11 @@
+import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/site/Reveal";
 import { Quote, Star } from "lucide-react";
 
 export const Route = createFileRoute("/blog")({
-  head: () => ({
-    meta: [
-      { title: "Journal — Maison Dentaire" },
-      { name: "description", content: "Notes on modern dentistry, cosmetic craft, and calm patient experiences from the Maison Dentaire studio." },
-      { property: "og:title", content: "Journal — Maison Dentaire" },
-      { property: "og:description", content: "Notes on modern dentistry from our studio." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/blog", "Dental Care Blog | Dental Brilliance Suite, Nashik", "Practical dental care tips and treatment guides from the team at Dental Brilliance Suite, Nashik.") }),
   component: () => (<PageGate slug="blog"><BlogPage /></PageGate>),
 });
 

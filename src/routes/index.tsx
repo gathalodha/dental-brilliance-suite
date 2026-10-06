@@ -1,3 +1,4 @@
+import { pageHead, jsonLd, dentistSchema } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Star, Phone, Clock, Award } from "lucide-react";
@@ -8,14 +9,7 @@ import { HeroImageCarousel } from "@/components/site/HeroImageCarousel";
 import { ScrollExpandMedia } from "@/components/site/ScrollExpandMedia";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Maison Dentaire — Boutique Luxury Dental Care" },
-      { name: "description", content: "Boutique dental practice blending clinical excellence with a calm, spa-like experience. Cosmetic, restorative and preventive dentistry." },
-      { property: "og:title", content: "Maison Dentaire — Boutique Luxury Dental Care" },
-      { property: "og:description", content: "Boutique dental practice blending clinical excellence with a calm, spa-like experience." },
-    ],
-  }),
+  head: () => ({ ...pageHead("/", "Dentist in Nashik | Dental Brilliance Suite – Dental Clinic", "Looking for a trusted dentist in Nashik? Dental Brilliance Suite offers teeth cleaning, dental implants, root canal treatment, orthodontics and cosmetic dentistry in Nashik, Maharashtra."), scripts: [jsonLd(dentistSchema)] }),
   component: HomePage,
 });
 
