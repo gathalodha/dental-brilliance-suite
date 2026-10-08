@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -96,12 +97,11 @@ function DoctorsPage() {
               <h2 className="text-balance text-4xl md:text-5xl">
                 Meet your specialist at a <em className="italic text-accent">complimentary consult.</em>
               </h2>
-              <Link
-                to="/contact"
+              <BookingLink
                 className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-primary px-7 py-4 text-sm font-medium text-primary-foreground hover:bg-accent"
               >
                 Book now <ArrowRight className="size-4" />
-              </Link>
+              </BookingLink>
             </div>
           </div>
         </Reveal>

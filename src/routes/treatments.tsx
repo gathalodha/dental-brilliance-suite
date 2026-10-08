@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -69,9 +70,9 @@ function TreatmentsPage() {
                   </div>
                 )}
                 {c.cta_text && (
-                  <Link to={c.cta_link || "/contact"} className="mt-6 inline-flex items-center gap-2 text-sm text-accent hover:underline">
+                  <BookingLink className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm text-accent hover:underline">
                     {c.cta_text} <ArrowRight className="size-4" />
-                  </Link>
+                  </BookingLink>
                 )}
               </div>
             </Reveal>
@@ -92,12 +93,11 @@ function TreatmentsPage() {
                 </p>
               </div>
               <div className="md:justify-self-end">
-                <Link
-                  to="/contact"
+                <BookingLink
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--bronze)] px-7 py-4 text-sm font-medium text-ivory transition-colors hover:bg-[var(--bronze-soft)] hover:text-cocoa"
                 >
                   Book now <ArrowRight className="size-4" />
-                </Link>
+                </BookingLink>
               </div>
             </div>
           </div>

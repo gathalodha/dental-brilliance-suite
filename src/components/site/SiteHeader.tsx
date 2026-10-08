@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
@@ -70,12 +71,11 @@ export function SiteHeader() {
               {phone}
             </a>
           )}
-          <Link
-            to="/contact"
+          <BookingLink
             className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent"
           >
             Book a visit
-          </Link>
+          </BookingLink>
         </div>
 
         <button
@@ -101,13 +101,12 @@ export function SiteHeader() {
                   {n.label}
                 </a>
               ))}
-              <Link
-                to="/contact"
+              <BookingLink
                 onClick={() => setOpen(false)}
                 className="mt-2 inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground"
               >
                 Book a visit
-              </Link>
+              </BookingLink>
             </div>
           </div>
         </div>
