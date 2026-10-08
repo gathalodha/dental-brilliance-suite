@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { pageHead, jsonLd, dentistSchema, telHref as toTelHref } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
@@ -40,7 +41,7 @@ function HomePage() {
   const heroImages = carouselImages?.length
     ? carouselImages
     : [{ id: "default-hero", image_url: heroImg, alt_text: "Serene modern dental clinic interior" }];
-  const primary = { text: hero?.cta_text ?? "Book a consultation", link: hero?.cta_link ?? "/contact", show: hero?.cta_enabled ?? true };
+  const primary = { text: hero?.cta_text ?? "Book a consultation", show: hero?.cta_enabled ?? true };
   const secondary = { text: hero?.secondary_cta_text ?? "Explore treatments", link: hero?.secondary_cta_link ?? "/treatments", show: hero?.secondary_cta_enabled ?? true };
 
   const stats = [
@@ -196,7 +197,7 @@ function HomePage() {
           <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 shadow-sm md:rounded-[2.5rem] md:p-16">
             <div className="grid gap-7 md:grid-cols-[1.4fr_1fr] md:items-center md:gap-8">
               <div><h2 className="text-balance text-4xl leading-tight md:text-5xl">Ready for a <em className="italic text-accent">quieter</em> dental visit?</h2><p className="mt-4 max-w-lg text-muted-foreground">Visit our dental clinic in Nashik for check-ups, teeth cleaning, implants and root canal treatment. Same-week appointments. Complimentary consultations for new cosmetic patients.</p></div>
-              <div className="flex flex-col gap-3 sm:flex-row md:flex-col md:items-end"><Link to="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent">Book a consultation <ArrowRight className="size-4" /></Link>{phone && <a href={telHref} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium hover:bg-secondary"><Phone className="size-4" /> {phone}</a>}</div>
+              <div className="flex flex-col gap-3 sm:flex-row md:flex-col md:items-end"><BookingLink className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent">Book a consultation <ArrowRight className="size-4" /></BookingLink>{phone && <a href={telHref} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium hover:bg-secondary"><Phone className="size-4" /> {phone}</a>}</div>
             </div>
           </div>
         </Reveal>
@@ -247,13 +248,12 @@ function HeroCopy({ brandLine, heading, subheading, primary, secondary, emergenc
               className="mt-7 grid gap-3 sm:flex sm:flex-wrap sm:items-center md:mt-9"
             >
               {primary.show && (
-                <a
-                  href={primary.link}
+                <BookingLink
                   className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-accent"
                 >
                   {primary.text}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </a>
+                </BookingLink>
               )}
               {secondary.show && (
                 <a

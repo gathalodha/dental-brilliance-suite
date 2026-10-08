@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -34,7 +35,7 @@ function TreatmentsPage() {
         ) : !treatments || treatments.length === 0 ? (
           <p className="text-center text-muted-foreground py-20">No treatments to show yet.</p>
         ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {treatments.map((c: any, i: number) => {
             const tags: string[] = [
               ...(Array.isArray(c.tags) ? c.tags : []),
@@ -42,9 +43,9 @@ function TreatmentsPage() {
             ];
             return (
             <Reveal key={c.id} delay={(i % 3) * 0.06}>
-              <div className="group flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]">
+              <div className="group flex h-full flex-col rounded-3xl border border-border/60 bg-card p-5 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]">
                 {c.image_url ? (
-                  <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                  <div className="aspect-[16/10] overflow-hidden rounded-2xl">
                     <img src={c.image_url} alt={c.name} className="size-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
                 ) : (
@@ -52,26 +53,26 @@ function TreatmentsPage() {
                     <Sparkles className="size-5" />
                   </div>
                 )}
-                <h3 className="mt-6 text-2xl">{c.name}</h3>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{c.short_description || c.description}</p>
+                <h3 className="mt-4 text-xl">{c.name}</h3>
+                <p className="mt-2 flex-1 text-sm text-muted-foreground line-clamp-3">{c.short_description || c.description}</p>
                 {Array.isArray(c.benefits) && c.benefits.length > 0 && (
-                  <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+                  <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
                     {c.benefits.map((b: string) => (
                       <li key={b} className="flex gap-2"><span className="text-accent">•</span>{b}</li>
                     ))}
                   </ul>
                 )}
                 {tags.length > 0 && (
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {tags.map((tag) => (
                       <span key={tag} className="rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground">{tag}</span>
                     ))}
                   </div>
                 )}
                 {c.cta_text && (
-                  <Link to={c.cta_link || "/contact"} className="mt-6 inline-flex items-center gap-2 text-sm text-accent hover:underline">
+                  <BookingLink className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm text-accent hover:underline">
                     {c.cta_text} <ArrowRight className="size-4" />
-                  </Link>
+                  </BookingLink>
                 )}
               </div>
             </Reveal>
@@ -92,12 +93,11 @@ function TreatmentsPage() {
                 </p>
               </div>
               <div className="md:justify-self-end">
-                <Link
-                  to="/contact"
+                <BookingLink
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--bronze)] px-7 py-4 text-sm font-medium text-ivory transition-colors hover:bg-[var(--bronze-soft)] hover:text-cocoa"
                 >
                   Book now <ArrowRight className="size-4" />
-                </Link>
+                </BookingLink>
               </div>
             </div>
           </div>

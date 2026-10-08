@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -83,12 +84,11 @@ function TestimonialsPage() {
                 </p>
               </div>
               <div className="md:justify-self-end">
-                <Link
-                  to="/contact"
+                <BookingLink
                   className="inline-flex items-center justify-center rounded-full bg-[var(--bronze)] px-8 py-4 text-sm font-medium text-primary-foreground hover:bg-[var(--bronze-soft)] hover:text-cocoa"
                 >
                   Book a visit
-                </Link>
+                </BookingLink>
               </div>
             </div>
           </div>

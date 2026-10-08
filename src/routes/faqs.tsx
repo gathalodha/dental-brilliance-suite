@@ -1,3 +1,4 @@
+import { BookingLink } from "@/components/site/BookingLink";
 import { pageHead } from "@/lib/seo";
 import { PageGate } from "@/components/site/PageGate";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -69,12 +70,11 @@ function FaqPage() {
               Book a complimentary cosmetic consultation and we'll answer everything in person.
             </p>
             <div className="mt-6">
-              <Link
-                to="/contact"
+              <BookingLink
                 className="inline-flex items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-primary-foreground hover:bg-accent"
               >
                 Book a consultation
-              </Link>
+              </BookingLink>
             </div>
           </div>
         </Reveal>
