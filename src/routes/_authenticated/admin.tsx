@@ -19,7 +19,6 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Section =
   | "Overview"
-  | "Bookings"
   | "Hero"
   | "About"
   | "Site Settings"
@@ -43,7 +42,6 @@ const NAV_GROUPS: NavGroup[] = [
     label: "Dashboard",
     items: [
       { label: "Overview", section: "Overview" },
-      { label: "Bookings", section: "Bookings" },
     ],
   },
   {
@@ -156,7 +154,6 @@ function AdminPage() {
         <div className="min-w-0">
 
           {section === "Overview" && <Overview />}
-          {section === "Bookings" && <Bookings />}
           {section === "Hero" && (
             <div className="space-y-6">
               <HeroCarouselEditor />
@@ -171,7 +168,6 @@ function AdminPage() {
                   { key: "image_url", label: "Fallback image", type: "image" },
                   { key: "background_video_url", label: "Background video URL", type: "url" },
                   { key: "cta_text", label: "Primary CTA text" },
-                  { key: "cta_link", label: "Primary CTA link", type: "url" },
                   { key: "cta_enabled", label: "Show primary CTA", type: "boolean" },
                   { key: "secondary_cta_text", label: "Secondary CTA text" },
                   { key: "secondary_cta_link", label: "Secondary CTA link", type: "url" },
@@ -394,7 +390,6 @@ const treatmentFields: FieldDef[] = [
   { key: "benefits", label: "Benefits", type: "array", placeholder: "Comma separated" },
   { key: "procedure_details", label: "Procedure details", type: "textarea" },
   { key: "cta_text", label: "CTA button text" },
-  { key: "cta_link", label: "CTA button link", type: "url" },
   { key: "visible", label: "Visible", type: "boolean" },
 ];
 
@@ -418,50 +413,6 @@ function Overview() {
         Choose a section from the menu, make your changes, then select Save. Changes appear on the website immediately.
       </p>
       <p className="mt-5 text-sm text-muted-foreground">Start with <strong className="text-foreground">Clinic Name & Contact</strong> for your shared clinic details, or choose a website page to edit its content.</p>
-    </Card>
-  );
-}
-
-function Bookings() {
-  const qc = useQueryClient();
-  const { data, isLoading } = useQuery({
-    queryKey: contentKeys.appointments,
-    queryFn: async () => {
-      const { data, error } = await supabase.from("appointments").select("*").order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-  const del = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("appointments").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => { toast.success("Deleted"); qc.invalidateQueries({ queryKey: contentKeys.appointments }); },
-  });
-  if (isLoading) return <Loader2 className="animate-spin" />;
-  return (
-    <Card className="p-6">
-      <h2 className="font-display text-2xl">Booking Requests</h2>
-      <div className="mt-6 space-y-3">
-        {(data ?? []).map((a: any) => (
-          <div key={a.id} className="rounded-lg border p-4 text-sm">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <strong>{a.name}</strong> · {a.email} · {a.phone}
-                {a.treatment && <> · <span className="text-muted-foreground">{a.treatment}</span></>}
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>{new Date(a.created_at).toLocaleString()}</span>
-                <Button size="icon" variant="ghost" onClick={() => del.mutate(a.id)}><Trash2 className="size-4" /></Button>
-              </div>
-            </div>
-            {a.preferred_date && <div className="mt-1 text-xs text-muted-foreground">Preferred: {a.preferred_date}</div>}
-            {a.message && <p className="mt-2 text-muted-foreground">{a.message}</p>}
-          </div>
-        ))}
-        {(data ?? []).length === 0 && <p className="text-sm text-muted-foreground">No bookings yet.</p>}
-      </div>
     </Card>
   );
 }

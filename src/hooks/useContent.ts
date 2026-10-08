@@ -15,7 +15,6 @@ export const contentKeys = {
   faqs: ["faqs"] as const,
   socialLinks: ["social_links"] as const,
   footerLinks: ["footer_links"] as const,
-  appointments: ["appointments"] as const,
   pageVisibility: ["page_visibility"] as const,
 };
 

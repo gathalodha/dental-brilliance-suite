@@ -35,7 +35,7 @@ function TreatmentsPage() {
         ) : !treatments || treatments.length === 0 ? (
           <p className="text-center text-muted-foreground py-20">No treatments to show yet.</p>
         ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {treatments.map((c: any, i: number) => {
             const tags: string[] = [
               ...(Array.isArray(c.tags) ? c.tags : []),
@@ -43,9 +43,9 @@ function TreatmentsPage() {
             ];
             return (
             <Reveal key={c.id} delay={(i % 3) * 0.06}>
-              <div className="group flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]">
+              <div className="group flex h-full flex-col rounded-3xl border border-border/60 bg-card p-5 transition-all hover:-translate-y-1 hover:shadow-[0_20px_50px_-25px_color-mix(in_oklab,var(--cocoa)_35%,transparent)]">
                 {c.image_url ? (
-                  <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                  <div className="aspect-[16/10] overflow-hidden rounded-2xl">
                     <img src={c.image_url} alt={c.name} className="size-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
                 ) : (
@@ -53,17 +53,17 @@ function TreatmentsPage() {
                     <Sparkles className="size-5" />
                   </div>
                 )}
-                <h3 className="mt-6 text-2xl">{c.name}</h3>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{c.short_description || c.description}</p>
+                <h3 className="mt-4 text-xl">{c.name}</h3>
+                <p className="mt-2 flex-1 text-sm text-muted-foreground line-clamp-3">{c.short_description || c.description}</p>
                 {Array.isArray(c.benefits) && c.benefits.length > 0 && (
-                  <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+                  <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
                     {c.benefits.map((b: string) => (
                       <li key={b} className="flex gap-2"><span className="text-accent">•</span>{b}</li>
                     ))}
                   </ul>
                 )}
                 {tags.length > 0 && (
-                  <div className="mt-6 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {tags.map((tag) => (
                       <span key={tag} className="rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground">{tag}</span>
                     ))}
