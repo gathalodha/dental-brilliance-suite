@@ -210,7 +210,7 @@ function HeroCopy({ brandLine, heading, subheading, primary, secondary, emergenc
   brandLine: string;
   heading: string;
   subheading: string;
-  primary: { text: string; link: string; show: boolean };
+  primary: { text: string; show: boolean };
   secondary: { text: string; link: string; show: boolean };
   emergencyPhone: string;
 }) {
